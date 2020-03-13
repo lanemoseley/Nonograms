@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64515146-a73e-4f27-807c-957597662fdd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fileManagement/download.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fileManagement/load.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fileManagement/save.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fileManagement/upload.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/help.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/javascript/undo.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/readme" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/readme" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javascript/readme" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/UndoClass.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +23,14 @@
     <execution>
       <executable />
     </execution>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -29,16 +43,21 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="AMPPS PHP" />
   <component name="ProjectId" id="1Ypu963x0wWVse1QnLK0s8H4vXx" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="settings.php.debug.servers" />
   </component>
   <component name="RunManager">
@@ -63,6 +82,7 @@
       <workItem from="1583683500001" duration="386000" />
       <workItem from="1583683934749" duration="320000" />
       <workItem from="1583711309633" duration="942000" />
+      <workItem from="1584069253768" duration="1000000" />
     </task>
     <servers />
   </component>
@@ -86,6 +106,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="184" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1583711535998" />
+    <state x="727" y="286" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1584070146537">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="727" y="286" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1584070146537" />
     <state x="442" y="291" key="#com.jetbrains.php.debug.validation.PhpWebServerValidationDialog#" timestamp="1583657480169">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -138,6 +162,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="285" key="GridCell.Tab.2.right/0.23.1440.877@0.23.1440.877" timestamp="1583730299292" />
+    <state x="822" y="407" key="NewPhpFileDialog" timestamp="1584069732120">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="822" y="407" key="NewPhpFileDialog/0.23.1440.877@0.23.1440.877" timestamp="1584069732120" />
     <state x="221" y="100" key="SettingsEditor" timestamp="1583683883544">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
