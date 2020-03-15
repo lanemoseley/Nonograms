@@ -5,7 +5,7 @@ require_once 'upload.php';
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>TODO: File Stuff Page</title>
+    <title>Grid Files</title>
     <link rel="stylesheet" type="text/css" href="../CSS/style.css">
 </head>
 <body>
@@ -14,7 +14,6 @@ require_once 'upload.php';
     <?php include "../includes/header.html" ?>
 
     <div class="content">
-        <h1>File Stuff Page Header</h1>
         <!--basic structure for a file upload-->
         <?php
         //determine what to do based on GET variables
@@ -29,7 +28,6 @@ require_once 'upload.php';
                 <tr><td><input type="file" name="fileToUpload" id="fileToUpload"></td></tr>
                 <tr><td><input type="submit" value="Upload" name="submit"></td></tr>
             </form>
-            </caption>
         </table>
 
         <table>
