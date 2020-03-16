@@ -110,3 +110,43 @@ window.onload = function() {
 
     updateUI();
 }
+
+/**
+ * Function to draw the nonogram grid
+ * @param shape -> the shape of the table
+ */
+function drawGrid(shape) {
+    var table = document.getElementById( "nonogram" );
+
+    table.innerHTML = "";
+
+    for (var i = 0; i < shape[0]; ++i) {
+        newRow = table.insertRow(i);
+        for (var j = 0; j < shape[1]; ++j) {
+            newCell = newRow.insertCell(j);
+            var button = document.createElement('BUTTON');
+            button.setAttribute("class", "gridButton");
+            button.setAttribute("id", "button" + i*shape[1] + j);
+            var text = document.createTextNode("\xa0");
+            button.appendChild(text);
+            newCell.appendChild(button);
+        }
+    }
+
+    // set the color
+    setColor();
+}
+
+/**
+ * Set the button color to the colorPicker's value
+ */
+function setColor() {
+    var picker = document.getElementById("colorPicker");
+
+    var buttons = document.getElementsByClassName("gridButton");
+    var button;
+
+    for (button of buttons) {
+        button.style.backgroundColor = picker.value;
+    }
+}

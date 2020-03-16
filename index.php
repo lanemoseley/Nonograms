@@ -6,23 +6,17 @@
     <script type="text/javascript"
             src="javascript/undo.js"></script>
 </head>
-<body>
+<body onload="drawGrid([5, 5])">
     <?php include "includes/header.html" ?>
 
     <div class="content">
         <table>
-            <tr><td>Color: <input type="color"/></td><td><button onClick="resize()">5x5</button></td><td><button onClick="resize()">10x10</button></td></tr>
+            <tr><td>Color: <input type="color" id="colorPicker" value="#e66465" onchange="setColor()"></td><td><button onClick="drawGrid([5, 5])">5x5</button></td><td><button onClick="drawGrid([10, 10])">10x10</button></td></tr>
             <tr><td><button onClick="save()">Save</button></td><td><button onClick="undo()">Undo</button></td><td><button onClick="redo()">Redo</button></td></tr>
         </table>
 
         <p>Click the below buttoms to add information and undo and redo</p>
-        <table class="nonogram">
-            <tr><td><button id="buttonA">A</button></td><td><button id="buttonB">B</button></td><td><button id="buttonC">C</button></td><td><button id="buttonD">D</button></td><td><button id="buttonA">E</button></td></tr>
-            <tr><td><button id="buttonA">A</button></td><td><button id="buttonB">B</button></td><td><button id="buttonC">C</button></td><td><button id="buttonD">D</button></td><td><button id="buttonA">E</button></td></tr>
-            <tr><td><button id="buttonA">A</button></td><td><button id="buttonB">B</button></td><td><button id="buttonC">C</button></td><td><button id="buttonD">D</button></td><td><button id="buttonA">E</button></td></tr>
-            <tr><td><button id="buttonA">A</button></td><td><button id="buttonB">B</button></td><td><button id="buttonC">C</button></td><td><button id="buttonD">D</button></td><td><button id="buttonA">E</button></td></tr>
-            <tr><td><button id="buttonA">A</button></td><td><button id="buttonB">B</button></td><td><button id="buttonC">C</button></td><td><button id="buttonD">D</button></td><td><button id="buttonA">E</button></td></tr>
-        </table>
+        <table id="nonogram"></table>
 
         <p><button id="undo">Undo</button><button id="redo">Redo</button></p>
         <p id="result"></p>
