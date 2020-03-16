@@ -55,7 +55,7 @@ function History() {
 //a "action" (exec) function and an undo
 //ideally, this should forward these calls onto the class that does the task
 function UndoRedo(letter){
-    this.letter = letter //need to store enought information to undo/redo
+    this.letter = letter //need to store enough information to undo/redo
 
     //appends the given letter to our result
     this.exec = function(){
@@ -100,13 +100,23 @@ var hist = new History();
 
 //attach all functions to html elements
 window.onload = function() {
-    //button click
-    document.getElementById("buttonA").onclick = letterEvent;
-    document.getElementById("buttonB").onclick = letterEvent;
-    document.getElementById("buttonC").onclick = letterEvent;
-    document.getElementById("buttonD").onclick = letterEvent;
-    document.getElementById("undo").onclick = hist.undoCmd;
-    document.getElementById("redo").onclick = hist.redoCmd;
+    // set up the color picker
+    document.getElementById("colorPicker").onchange = setColor;
+    document.getElementById("colorPicker").value = "#e66465";
+
+    // set up buttons
+    document.getElementById("resize5x5").onclick = function() { drawGrid([5, 5]) };
+    document.getElementById("resize10x10").onclick = function() { drawGrid([10, 10]) }
+
+    // document.getElementById("buttonA").onclick = letterEvent;
+    // document.getElementById("buttonB").onclick = letterEvent;
+    // document.getElementById("buttonC").onclick = letterEvent;
+    // document.getElementById("buttonD").onclick = letterEvent;
+    // document.getElementById("undo").onclick = hist.undoCmd;
+    // document.getElementById("redo").onclick = hist.redoCmd;
+
+    // draw the grid
+    drawGrid([5, 5]);
 
     updateUI();
 }
@@ -117,24 +127,27 @@ window.onload = function() {
  */
 function drawGrid(shape) {
     var table = document.getElementById( "nonogram" );
-
     table.innerHTML = "";
 
     for (var i = 0; i < shape[0]; ++i) {
         newRow = table.insertRow(i);
+
         for (var j = 0; j < shape[1]; ++j) {
             newCell = newRow.insertCell(j);
+
             var button = document.createElement('BUTTON');
             button.setAttribute("class", "gridButton");
             button.setAttribute("id", "button" + i*shape[1] + j);
-            var text = document.createTextNode("\xa0");
+            button.onclick = setColor;
+
+            var text = document.createTextNode("");
+
             button.appendChild(text);
             newCell.appendChild(button);
         }
     }
 
-    // set the color
-    setColor();
+    document.getElementById("colorPicker").value = "#e66465";
 }
 
 /**
@@ -143,10 +156,13 @@ function drawGrid(shape) {
 function setColor() {
     var picker = document.getElementById("colorPicker");
 
-    var buttons = document.getElementsByClassName("gridButton");
-    var button;
-
-    for (button of buttons) {
-        button.style.backgroundColor = picker.value;
+    if (this.style.backgroundColor != "" && this.innerHTML != "X") {
+        this.style.backgroundColor = "";
+        this.innerHTML = "X";
+    } else if (this.innerHTML == "X") {
+        this.innerHTML = ""
+        this.style.backgroundColor = "";
+    } else {
+        this.style.backgroundColor = picker.value;
     }
 }

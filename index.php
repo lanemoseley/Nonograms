@@ -6,12 +6,12 @@
     <script type="text/javascript"
             src="javascript/undo.js"></script>
 </head>
-<body onload="drawGrid([5, 5])">
+<body>
     <?php include "includes/header.html" ?>
 
     <div class="content">
         <table>
-            <tr><td>Color: <input type="color" id="colorPicker" value="#e66465" onchange="setColor()"></td><td><button onClick="drawGrid([5, 5])">5x5</button></td><td><button onClick="drawGrid([10, 10])">10x10</button></td></tr>
+            <tr><td>Color: <input type="color" id="colorPicker"></td><td><button id="resize5x5">5x5</button></td><td><button id="resize10x10">10x10</button></td></tr>
             <tr><td><button onClick="save()">Save</button></td><td><button onClick="undo()">Undo</button></td><td><button onClick="redo()">Redo</button></td></tr>
         </table>
 

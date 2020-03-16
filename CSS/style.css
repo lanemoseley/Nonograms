@@ -2,9 +2,13 @@ html, body {
     margin: 0;
 }
 
-/*.gridButton {*/
-/*    background-color: blue;*/
-/*}*/
+.gridButton {
+    color: red;
+    font-size: 30px;
+    min-width: 50px;
+    min-height: 50px;
+    padding: 0;
+}
 
 /*table {*/
 /*    border: 1px solid #ccc;*/
