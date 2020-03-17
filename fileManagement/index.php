@@ -32,6 +32,7 @@ require_once 'upload.php';
 
         <table>
             <caption>Select file to load or download:</caption>
+            <!-- TODO: this should be in a php file -->
             <?php
                 $path = '../uploads/';
                 $files = scandir($path);

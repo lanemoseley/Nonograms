@@ -4,9 +4,9 @@ html, body {
 
 .gridButton {
     color: red;
-    font-size: 30px;
-    min-width: 50px;
-    min-height: 50px;
+    font-size: 20px;
+    min-width: 30px;
+    min-height: 30px;
     padding: 0;
 }
 

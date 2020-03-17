@@ -102,18 +102,13 @@ var hist = new History();
 window.onload = function() {
     // set up the color picker
     document.getElementById("colorPicker").onchange = setColor;
-    document.getElementById("colorPicker").value = "#e66465";
+    document.getElementById("colorPicker").value = "#000000";
 
     // set up buttons
     document.getElementById("resize5x5").onclick = function() { drawGrid([5, 5]) };
-    document.getElementById("resize10x10").onclick = function() { drawGrid([10, 10]) }
-
-    // document.getElementById("buttonA").onclick = letterEvent;
-    // document.getElementById("buttonB").onclick = letterEvent;
-    // document.getElementById("buttonC").onclick = letterEvent;
-    // document.getElementById("buttonD").onclick = letterEvent;
-    // document.getElementById("undo").onclick = hist.undoCmd;
-    // document.getElementById("redo").onclick = hist.redoCmd;
+    document.getElementById("resize10x10").onclick = function() { drawGrid([10, 10]) };
+    document.getElementById("undo").onclick = hist.undoCmd;
+    document.getElementById("redo").onclick = hist.redoCmd;
 
     // draw the grid
     drawGrid([5, 5]);
@@ -147,7 +142,7 @@ function drawGrid(shape) {
         }
     }
 
-    document.getElementById("colorPicker").value = "#e66465";
+    document.getElementById("colorPicker").value = "#000000";
 }
 
 /**
@@ -165,4 +160,12 @@ function setColor() {
     } else {
         this.style.backgroundColor = picker.value;
     }
+}
+
+function xmlTest() {
+    var world = "world";
+    var hello = "hello";
+
+    window.location.href = "write.php?w1=" + hello+"&w2=" + world;
+    window.onl
 }
