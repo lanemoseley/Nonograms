@@ -163,9 +163,28 @@ function setColor() {
 }
 
 function xmlTest() {
+    var grid = document.getElementById("nonogram")
+    var values = [ ]
+
+
+    for (var i = 0; i < grid.rows.length; i++) {
+        for (var j = 0; j < grid.rows[i].cells.length; j++) {
+            console.log(grid.rows[i].cells.item(j).style.backgroundColor);
+            if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
+                values.push(1);
+            } else if (grid.rows[i].cells.item(j).firstChild.innerText === "X") {
+                values.push("X");
+            } else {
+                values.push(0);
+            }
+
+        }
+    }
+
+    console.log(values);
+
     var world = "world";
     var hello = "hello";
 
     window.location.href = "write.php?w1=" + hello+"&w2=" + world;
-    window.onl
 }
