@@ -183,6 +183,7 @@ function xmlTest() {
     }
 
     $(document).ready(function() {
+        var $timeStamp = new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:/g, '-');
         var $grid = values;
         var $pickerValue = pickerValue;
 
@@ -190,14 +191,9 @@ function xmlTest() {
             $.ajax({
                 type: 'POST',
                 url: 'write.php',
-                data: { pickerValue: $pickerValue, grid: $grid },
+                data: { timeStamp: $timeStamp, pickerValue: $pickerValue, grid: $grid },
                 success: function() {
-                    var fullDate = new Date();
-                    var date = fullDate.getFullYear() + '-' + (fullDate.getMonth() + 1 ) + '-' + fullDate.getDate();
-                    var time = fullDate.getHours() + ":" + fullDate.getMinutes() + ":" + fullDate.getSeconds();
-                    var dateTime = date + ' ' + time;
-
-                    document.getElementById("status").innerHTML = "Last Saved: " + dateTime;
+                    document.getElementById("status").innerHTML = "Last Saved: " + $timeStamp;
                 },
                 error: function() {
                     document.getElementById("status").innerHTML = "Error saving nonogram!";

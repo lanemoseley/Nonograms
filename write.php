@@ -41,7 +41,14 @@ function writeXML($data) {
     }
 
     // save the xml file
-    $xml->saveXML("uploads/out.xml");
+    $fname = "uploads/grid_" . $_POST['timeStamp'] . ".xml";
+
+    // if there is an error saving the file, report it to the client
+    if (!$xml->saveXML($fname)) {
+        header('HTTP Error 500 - Internal Server Error');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode(array('message' => 'ERROR', 'code' => 1337)));
+    }
 }
 
 ?>
