@@ -166,12 +166,14 @@ function setColor() {
 function xmlTest() {
     var grid = document.getElementById("nonogram")
     var values = [ ]
+    var pickerValue = document.getElementById("colorPicker").value;
 
     for (var i = 0; i < grid.rows.length; i++) {
         for (var j = 0; j < grid.rows[i].cells.length; j++) {
             console.log(grid.rows[i].cells.item(j).style.backgroundColor);
             if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
-                values.push(1);
+                var cellColor = grid.rows[i].cells.item(j).firstChild.style.backgroundColor;
+                values.push(cellColor);
             } else if (grid.rows[i].cells.item(j).firstChild.innerText === "X") {
                 values.push("X");
             } else {
@@ -180,31 +182,27 @@ function xmlTest() {
         }
     }
 
-    console.log(values);
-
     $(document).ready(function() {
-        var $world = "jared";
-        var $hello = "arnold";
+        var $grid = values;
+        var $pickerValue = pickerValue;
 
         $('#save').on('click', function() {
-            var order = {
-                world: $world,
-                hello: $hello,
-            };
-
             $.ajax({
                 type: 'POST',
                 url: 'write.php',
-                data: order,
+                data: { pickerValue: $pickerValue, grid: $grid },
                 success: function() {
-                    alert('Nonogram saved!')
+                    var fullDate = new Date();
+                    var date = fullDate.getFullYear() + '-' + (fullDate.getMonth() + 1 ) + '-' + fullDate.getDate();
+                    var time = fullDate.getHours() + ":" + fullDate.getMinutes() + ":" + fullDate.getSeconds();
+                    var dateTime = date + ' ' + time;
+
+                    document.getElementById("status").innerHTML = "Last Saved: " + dateTime;
                 },
                 error: function() {
-                    alert('Error saving nonogram!');
+                    document.getElementById("status").innerHTML = "Error saving nonogram!";
                 }
             });
         });
     });
-
-//    window.location.href = "write.php?w1=" + hello+"&w2=" + world;
 }

@@ -28,33 +28,20 @@ if($_POST !== null or $_REQUEST !== null) {
     writeXML();
 }
 
-//this creates a example xml document from scratch and then walks through the results
-function writeXML($data)
-{
+function writeXML($data) {
     //this is how to make a new xml doument with mydoc as teh outtermost tags
-    $xmlTest = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><mydoc></mydoc>');
+    $xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><root></root>');
 
-    //this is how to add an attribute
-    $xmlTest->addAttribute('attribute', 'value goes here');
+    // save the color picker value
+    $xml->addAttribute('pickerValue', $_POST['pickerValue']);
 
-    //here is how to make a child
-    $child = $xmlTest->addChild('W1');
-    $child->addAttribute('Name', $_POST['world']);
+    // save the cell values
+    foreach($_POST['grid'] as $key=>$value) {
+        $xml->addChild("cell" . $key, $value);
+    }
 
-    $child = $xmlTest->addChild('W2');
-    $child->addAttribute('Name', $_POST['hello']);
-
-    //another way to add a child
-    $grandchild=$child->addChild('Grandchild', 'innermost');
-    $grandchild->addAttribute('stuff', 'more stuff');
-    $grandchild->addChild('Grandchild', 'innermost');
-
-    $xmlTest->saveXML("uploads/out.xml");
-
-    echo "<script>
-             alert('message sent succesfully'); 
-             window.history.go(-1);
-     </script>";
+    // save the xml file
+    $xml->saveXML("uploads/out.xml");
 }
 
 ?>
