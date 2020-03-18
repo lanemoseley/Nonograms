@@ -183,8 +183,8 @@ function xmlTest() {
     console.log(values);
 
     $(document).ready(function() {
-        var $world = "world";
-        var $hello = "hello";
+        var $world = "jared";
+        var $hello = "arnold";
 
         $('#save').on('click', function() {
             var order = {

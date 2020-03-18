@@ -24,22 +24,13 @@ function walkTheTree($xml, $level)
     }
 }
 
-if(isset($_GET["w1"]) && isset($_GET["w2"]))
-{
-    $_SESSION["w1"] = $_GET["w1"];
-    $_SESSION["w2"] = $_GET["w2"];
+if($_POST !== null or $_REQUEST !== null) {
     writeXML();
 }
-
-$data = $_POST['data'] or $_REQUEST['data'];
-$data = json_decode($data);
-writeXML($data);
 
 //this creates a example xml document from scratch and then walks through the results
 function writeXML($data)
 {
-
-
     //this is how to make a new xml doument with mydoc as teh outtermost tags
     $xmlTest = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><mydoc></mydoc>');
 
@@ -48,10 +39,10 @@ function writeXML($data)
 
     //here is how to make a child
     $child = $xmlTest->addChild('W1');
-    $child->addAttribute('Name', $data);
+    $child->addAttribute('Name', $_POST['world']);
 
     $child = $xmlTest->addChild('W2');
-    $child->addAttribute('Name', $_SESSION["w2"]);
+    $child->addAttribute('Name', $_POST['hello']);
 
     //another way to add a child
     $grandchild=$child->addChild('Grandchild', 'innermost');
