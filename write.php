@@ -31,9 +31,12 @@ if(isset($_GET["w1"]) && isset($_GET["w2"]))
     writeXML();
 }
 
+$data = $_POST['data'] or $_REQUEST['data'];
+$data = json_decode($data);
+writeXML($data);
 
 //this creates a example xml document from scratch and then walks through the results
-function writeXML()
+function writeXML($data)
 {
 
 
@@ -45,7 +48,7 @@ function writeXML()
 
     //here is how to make a child
     $child = $xmlTest->addChild('W1');
-    $child->addAttribute('Name', $_SESSION["w1"]);
+    $child->addAttribute('Name', $data);
 
     $child = $xmlTest->addChild('W2');
     $child->addAttribute('Name', $_SESSION["w2"]);

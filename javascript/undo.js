@@ -109,6 +109,7 @@ window.onload = function() {
     document.getElementById("resize10x10").onclick = function() { drawGrid([10, 10]) };
     document.getElementById("undo").onclick = hist.undoCmd;
     document.getElementById("redo").onclick = hist.redoCmd;
+    document.getElementById("save").onclick = xmlTest;
 
     // draw the grid
     drawGrid([5, 5]);
@@ -166,7 +167,6 @@ function xmlTest() {
     var grid = document.getElementById("nonogram")
     var values = [ ]
 
-
     for (var i = 0; i < grid.rows.length; i++) {
         for (var j = 0; j < grid.rows[i].cells.length; j++) {
             console.log(grid.rows[i].cells.item(j).style.backgroundColor);
@@ -177,14 +177,34 @@ function xmlTest() {
             } else {
                 values.push(0);
             }
-
         }
     }
 
     console.log(values);
 
-    var world = "world";
-    var hello = "hello";
+    $(document).ready(function() {
+        var $world = "world";
+        var $hello = "hello";
 
-    window.location.href = "write.php?w1=" + hello+"&w2=" + world;
+        $('#save').on('click', function() {
+            var order = {
+                world: $world,
+                hello: $hello,
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: 'write.php',
+                data: order,
+                success: function() {
+                    alert('Nonogram saved!')
+                },
+                error: function() {
+                    alert('Error saving nonogram!');
+                }
+            });
+        });
+    });
+
+//    window.location.href = "write.php?w1=" + hello+"&w2=" + world;
 }
