@@ -120,8 +120,17 @@ window.onload = function() {
 /**
  * Function to draw the nonogram grid
  * @param shape -> the shape of the table
+ * @param values -> if given, values to populate grid with
  */
 function drawGrid(shape) {
+    var values = JSON.parse(sessionStorage.getItem('grid'));
+
+    var picker = sessionStorage.getItem('colorPicker');
+
+    if (picker === null) {
+        picker = "#000000";
+    }
+
     var table = document.getElementById( "nonogram" );
     table.innerHTML = "";
 
@@ -137,13 +146,23 @@ function drawGrid(shape) {
             button.onclick = setColor;
 
             var text = document.createTextNode("");
-
             button.appendChild(text);
+
+            if(values !== null) {
+                if (values[i*shape[1] + j] === "X") {
+                    button.innerHTML = "X";
+                } else if (values[i*shape[1] + j] !== "none") {
+                    button.style.backgroundColor = values[i*shape[1] + j];
+                }
+            }
+
             newCell.appendChild(button);
         }
     }
 
-    document.getElementById("colorPicker").value = "#000000";
+    document.getElementById("colorPicker").value = picker;
+
+    sessionStorage.clear();
 }
 
 /**
@@ -170,14 +189,14 @@ function xmlTest() {
 
     for (var i = 0; i < grid.rows.length; i++) {
         for (var j = 0; j < grid.rows[i].cells.length; j++) {
-            console.log(grid.rows[i].cells.item(j).style.backgroundColor);
+            //console.log(grid.rows[i].cells.item(j).style.backgroundColor);
             if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
                 var cellColor = grid.rows[i].cells.item(j).firstChild.style.backgroundColor;
                 values.push(cellColor);
             } else if (grid.rows[i].cells.item(j).firstChild.innerText === "X") {
                 values.push("X");
             } else {
-                values.push(0);
+                values.push("none");
             }
         }
     }
