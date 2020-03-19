@@ -2,6 +2,13 @@
 
 function upload()
 {
+    // TODO: is this actually sanitizing the string?
+// sanitize
+    $fname = $_FILES["fileToUpload"]["name"];
+    $path_parts = pathinfo($fname);
+    $fname = $path_parts['basename'];
+
+
     //keep uploads separate for security. uploads MUST allow public write, which is VERY unsafe if allowed in general
     $target_dir = "../uploads/";
     $message = '';
@@ -11,14 +18,14 @@ function upload()
     //would be better as it names it the same as what the user uploaded.
     //or best yet, use a unique id (uniqid())
     $file = $_FILES["fileToUpload"];
-    $target_file = $target_dir . "test.txt";
+    $target_file = $target_dir . $fname;
 
     //how to check for file type
     $imageFileType =
         strtolower(pathinfo($file["name"],PATHINFO_EXTENSION));
 
-    if($imageFileType != "txt") {
-        echo  "Only txt file types are supported. Please, try a different file.<br>";
+    if($imageFileType != "xml") {
+        echo  "Only xml file types are supported. Please, try a different file.<br>";
         return;
     }
 

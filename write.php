@@ -28,7 +28,7 @@ if($_POST !== null or $_REQUEST !== null) {
     writeXML();
 }
 
-function writeXML($data) {
+function writeXML() {
     //this is how to make a new xml doument with mydoc as teh outtermost tags
     $xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><root></root>');
 
