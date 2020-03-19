@@ -123,6 +123,11 @@ window.onload = function() {
  * @param values -> if given, values to populate grid with
  */
 function drawGrid(shape) {
+    var oldShape = JSON.parse(sessionStorage.getItem('shape'));
+    if (oldShape !== null) {
+        shape = oldShape;
+    }
+
     var values = JSON.parse(sessionStorage.getItem('grid'));
 
     var picker = sessionStorage.getItem('colorPicker');
