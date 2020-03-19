@@ -31,7 +31,7 @@ function loadGrid(btn) {
             window.location.href = "../index.php";
         },
         error: function() {
-            document.getElementById("status").innerHTML = "Error loading nonogram!";
+            alert("Error loading nonogram!");
         }
     });
 }
