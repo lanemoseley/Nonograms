@@ -182,6 +182,7 @@ function xmlTest() {
         }
     }
 
+    // TODO: these function wrappers can probably be removed
     $(document).ready(function() {
         var $timeStamp = new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:/g, '-');
         var $grid = values;

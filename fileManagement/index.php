@@ -1,12 +1,14 @@
 <?php
 require_once 'upload.php';
 ?>
-
+<!--TODO: Fix file paths-->
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title>Grid Files</title>
     <link rel="stylesheet" type="text/css" href="../CSS/style.css">
+    <script type="text/javascript" src="../javascript/fileStuff.js"></script>
+    <script src="../jquery/jquery.js"></script>
 </head>
 <body>
 
@@ -21,7 +23,7 @@ require_once 'upload.php';
             upload();
         }
         ?>
-
+        <p id="status"></p>
         <table>
             <caption>Select file to upload:</caption>
             <form action="index.php?up=1" method="post" enctype="multipart/form-data">
@@ -40,30 +42,11 @@ require_once 'upload.php';
                 foreach($files as $file) {
                     echo "<tr>";
                     echo "<td>$file</td>";
-                    echo "<td><button onClick=\"load()\">Load</button></td><td><button onClick=\"niceDownload()\">Download</button><br></td>";
+                    echo "<td><button id=\"fileUpBtn\" onClick=\"load()\">Load</button></td><td><button id=$file onClick=\"initDownload(this)\">Download</button><br></td>";
                     echo "</tr>";
                 }
             ?>
         </table>
-
-        <!-- refresh the page, and build in a link to the file -->
-        <script>
-            //Script is local to make is easy to see
-
-            //make a link
-            function niceDownload() {
-                window.location.href = "index.php?link=1"
-            }
-        </script>
-
-        <p id="fileLink">
-            <?php
-            if (isset($_GET['link'])) {
-                echo '<a href="../uploads/test.txt">Download file if it exists</a>';
-            }
-            ?>
-        </p>
-
     </div>
 
     <?php include "../includes/footer.html" ?>
