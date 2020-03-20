@@ -23,7 +23,7 @@ function displayFiles() {
 
         echo "<tr>";
         echo "<td>$file</td>";
-        echo "<td><button id=$fname onClick=\"loadGrid(this)\">Load</button></td><td><button id=$fname onClick=\"initDownload(this)\">Download</button><br></td>";
+        echo "<td><button id=$fname onClick=\"importNonogramFromXML(this.id)\">Load</button></td><td><button id=$fname onClick=\"initDownload(this)\">Download</button><br></td>";
         echo "</tr>";
     }
 

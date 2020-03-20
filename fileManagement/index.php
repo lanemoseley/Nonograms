@@ -14,7 +14,7 @@ require_once 'file_list.php';
     <meta charset="UTF-8">
     <title>Grid Files</title>
     <link rel="stylesheet" type="text/css" href="../CSS/style.css">
-    <script type="text/javascript" src="../javascript/fileStuff.js"></script>
+    <script type="text/javascript" src="../javascript/files.js"></script>
     <script src="../jquery/jquery.js"></script>
 </head>
 <body>
