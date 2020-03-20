@@ -84,6 +84,7 @@ function UndoRedo(id, attrs, oldAttrs, color, oldColor, shape, oldShape){
             this.currGrid = gridToArray();
             drawGrid(this.shape);
         }
+        checkForWin();
     };
 
     this.undo = function() {
@@ -104,6 +105,7 @@ function UndoRedo(id, attrs, oldAttrs, color, oldColor, shape, oldShape){
         if (this.shape !== this.oldShape) {
             drawGrid(this.oldShape, this.currGrid);
         }
+        checkForWin();
     };
 }
 
@@ -217,6 +219,10 @@ function drawGrid(shape, gridArr=null) {
     }
 
 //    document.getElementById("colorPicker").value = color;
+    var vals = JSON.parse(sessionStorage.getItem('grid'));
+    if (vals !== null) {
+        checkForWin();
+    }
 
     sessionStorage.clear();
 }
@@ -274,7 +280,9 @@ function setColor(btn) {
 function checkForWin() {
     var userArr = gridToArray().flat();
 
-    var path = "res/puzzle1.xml";
+    var rows = document.getElementById("nonogram").rows.length;
+    var path = (rows === 5) ? "res/puzzle1.xml" : "res/puzzle2.xml";
+
     $.ajax({
         url: path,
         success: function(data) {
@@ -286,8 +294,7 @@ function checkForWin() {
                 }
             }
 
-            var width = 5; // TODO: (grid.length === 25) ? 5 : 10;
-
+            // clean up the user array so we can compare it to the solution
             var clr = new Option().style;
             userArr.forEach(function(val, i) {
                 clr.color = val;
@@ -306,7 +313,7 @@ function checkForWin() {
                     if (val === 'none') { final[i] = "X"; }
                 });
 
-                drawGrid([5, 5], final);
+                drawGrid([rows, rows], final);
 
                 alert("Congratulations, you solved this nonogram!")
             }
