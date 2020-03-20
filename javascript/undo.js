@@ -162,7 +162,7 @@ window.onload = function() {
     drawGrid([5, 5]);
 
     updateUI();
-}
+};
 
 /**
  * Function to draw the nonogram grid
@@ -183,9 +183,8 @@ function drawGrid(shape, gridArr=null) {
     }
 
     var picker = sessionStorage.getItem('colorPicker');
-
-    if (picker === null) {
-        picker = "#000000";
+    if (picker !== null) {
+        document.getElementById("colorPicker").value = picker.value;
     }
 
     var table = document.getElementById( "nonogram" );
@@ -217,7 +216,7 @@ function drawGrid(shape, gridArr=null) {
         }
     }
 
-    document.getElementById("colorPicker").value = picker;
+//    document.getElementById("colorPicker").value = color;
 
     sessionStorage.clear();
 }
@@ -269,6 +268,50 @@ function setColor(btn) {
     }
 
     updateUI();
+    checkForWin();
+}
+
+function checkForWin() {
+    var userArr = gridToArray().flat();
+
+    var path = "res/puzzle1.xml";
+    $.ajax({
+        url: path,
+        success: function(data) {
+            var cells = data.getElementsByTagName("value");
+            var grid = [ ];
+            for (var val in cells) {
+                if (cells[val].hasChildNodes) {
+                    grid.push(cells[val].childNodes[0].nodeValue);
+                }
+            }
+
+            var width = 5; // TODO: (grid.length === 25) ? 5 : 10;
+
+            var clr = new Option().style;
+            userArr.forEach(function(val, i) {
+                clr.color = val;
+
+                // check if not a valid color
+                if (clr.color !== val) {
+                    userArr[i] = "X";
+                } else {
+                    userArr[i] = "1";
+                }
+            });
+
+            if (JSON.stringify(userArr) == JSON.stringify(grid)) {
+                var final = gridToArray().flat();
+                final.forEach(function(val, i) {
+                    if (val === 'none') { final[i] = "X"; }
+                });
+
+                drawGrid([5, 5], final);
+
+                alert("Congratulations, you solved this nonogram!")
+            }
+        }
+    });
 }
 
 function gridToArray() {
@@ -277,7 +320,6 @@ function gridToArray() {
 
     for (var i = 0; i < grid.rows.length; i++) {
         for (var j = 0; j < grid.rows[i].cells.length; j++) {
-            //console.log(grid.rows[i].cells.item(j).style.backgroundColor);
             if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
                 var cellColor = grid.rows[i].cells.item(j).firstChild.style.backgroundColor;
                 values.push(cellColor);

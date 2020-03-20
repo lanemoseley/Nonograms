@@ -13,7 +13,7 @@
     <div class="content">
         <p id="status"></p>
         <table>
-            <tr><td>Color: <input type="color" id="colorPicker"></td><td><button id="resize5x5">5x5</button></td><td><button id="resize10x10">10x10</button></td></tr>
+            <tr><td><label for="colorPicker">Color:</label><input type="color" id="colorPicker"></td><td><button id="resize5x5">5x5</button></td><td><button id="resize10x10">10x10</button></td></tr>
             <tr><td><button type="button" id="save">Save</button></td><td><button id="undo">Undo</button></td><td><button id="redo">Redo</button></td></tr>
         </table>
 
