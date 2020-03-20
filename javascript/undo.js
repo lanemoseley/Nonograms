@@ -104,7 +104,7 @@ function UndoRedo(attrs, oldAttrs) {
 
         // if the shape was changed, revert it
         if (JSON.stringify(this.curr.get('shape')) !== JSON.stringify(this.old.get('shape'))) {
-            drawGrid(this.old.get('shape'), this.curr.get('grid'));
+            drawGrid(this.old.get('shape'), this.curr.get('grid').flat());
         }
 
         checkForWin();
