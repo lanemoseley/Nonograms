@@ -15,8 +15,8 @@ function start() {
     document.getElementById("colorPicker").value = "#000000";
 
     // set up the buttons
-    document.getElementById("resize5x5").onclick = function() { initResize( [5, 5] ); };
-    document.getElementById("resize10x10").onclick = function() { initResize( [10, 10] ); };
+    document.getElementById("resize5x5").onclick = function() { resizeNonogram( [5, 5] ); };
+    document.getElementById("resize10x10").onclick = function() { resizeNonogram( [10, 10] ); };
     document.getElementById("undo").onclick = hist.undoCmd;
     document.getElementById("redo").onclick = hist.redoCmd;
 
