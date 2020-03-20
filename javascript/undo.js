@@ -178,6 +178,7 @@ function drawGrid(shape, gridArr=null) {
     var values = JSON.parse(sessionStorage.getItem('grid'));
 
     if (values === null && gridArr !== null) {
+        // TODO: should only be using 1 or 2 d arrays not a mix of both!!!!
         values = gridArr.flat();
     }
 
