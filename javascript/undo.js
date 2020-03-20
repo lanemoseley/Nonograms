@@ -54,21 +54,52 @@ function History() {
 //concrete UndoRedo class. Since we have undo and redo, we much have
 //a "action" (exec) function and an undo
 //ideally, this should forward these calls onto the class that does the task
-function UndoRedo(btn, attrs){
-    this.old = [btn.innerHTML, btn.style.backgroundColor];
+function UndoRedo(id, attrs, oldAttrs, color, oldColor, shape, oldShape){
+    this.old = oldAttrs;
     this.curr = attrs;
-    this.btn = btn;
+    this.id = id;
+    this.color = color;
+    this.shape = shape;
+    this.oldColor = oldColor;
+    this.oldShape = oldShape;
 
-    //appends the given letter to our result
     this.exec = function() {
-        this.btn.innerHTML = this.curr[0];
-        this.btn.style.backgroundColor = this.curr[1];
+        if (this.id !== -1) {
+            var ele = document.getElementById(this.id);
+            // update the buttons
+            ele.innerHTML = this.curr[0];
+            ele.style.backgroundColor = this.curr[1];
+        }
+
+        var picker = document.getElementById("colorPicker");
+
+        // update the picker
+        picker.value = this.color;
+
+        // update the shape
+        if (this.shape !== this.oldShape) {
+            this.drawGrid(this.shape);
+        }
     };
 
-    //removes a letter
     this.undo = function() {
-        this.btn.innerHTML = this.old[0];
-        this.btn.style.backgroundColor = this.old[1];
+        if (this.id !== -1) {
+            var ele = document.getElementById(this.id);
+
+            // revert the buttons
+            ele.innerHTML = this.old[0];
+            ele.style.backgroundColor = this.old[1];
+        }
+
+        var picker = document.getElementById("colorPicker");
+
+        // revert the picker
+        picker.value = this.oldColor;
+
+        // revert the shape
+        if (this.shape !== this.oldShape) {
+            this.drawGrid(this.oldShape);
+        }
     };
 }
 
@@ -86,7 +117,8 @@ var hist = new History();
 //attach all functions to html elements
 window.onload = function() {
     // set up the color picker
-    document.getElementById("colorPicker").onchange = setColor;
+    document.getElementById("colorPicker").onchange = function() { setPickerColor(this) };
+    document.getElementById("colorPicker").onclick= function() {this.oldvalue = this.value; };
     document.getElementById("colorPicker").value = "#000000";
 
     // set up buttons
@@ -155,32 +187,50 @@ function drawGrid(shape) {
     sessionStorage.clear();
 }
 
+function setPickerColor(picker) {
+    var id = -1;
+    var attrs = [ ];
+    var oldAttrs = [ ];
+
+    var oldColor = picker.oldvalue;
+    var newColor = picker.value;
+
+    var rows = document.getElementById("nonogram").rows.length;
+    var shape = [rows, rows];
+
+
+    hist.executeAction(new UndoRedo(id, attrs, oldAttrs, newColor, oldColor, shape, shape));
+}
 /**
  * Set the button color to the colorPicker's value
  */
 // TODO: this is not a good name
 function setColor(btn) {
     var picker = document.getElementById("colorPicker");
-    var innerhtml, background, attrs;
+    var innerhtml, background, newAttrs, oldAttrs;
+    oldAttrs = [btn.innerHTML, btn.style.backgroundColor];
+    var rows = document.getElementById("nonogram").rows.length;
+    var shape = [rows, rows];
+    var color = picker.value;
 
     if (btn.style.backgroundColor != "" && btn.innerHTML != "X") {
         innerhtml = "X";
         background = "";
-        attrs = [innerhtml, background];
+        newAttrs = [innerhtml, background];
 
-        hist.executeAction(new UndoRedo(btn, attrs));
+        hist.executeAction(new UndoRedo(btn.id, newAttrs, oldAttrs, color, color, shape, shape));
     } else if (btn.innerHTML == "X") {
         innerhtml = "";
         background = "";
-        attrs = [innerhtml, background];
+        newAttrs = [innerhtml, background];
 
-        hist.executeAction(new UndoRedo(btn, attrs));
+        hist.executeAction(new UndoRedo(btn.id, newAttrs, oldAttrs, color, color, shape, shape));
     } else {
         innerhtml = "";
         background = picker.value;
-        attrs = [innerhtml, background];
+        newAttrs = [innerhtml, background];
 
-        hist.executeAction(new UndoRedo(btn, attrs));
+        hist.executeAction(new UndoRedo(btn.id, newAttrs, oldAttrs, color, color, shape, shape));
     }
 
     updateUI();
