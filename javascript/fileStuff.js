@@ -1,5 +1,5 @@
 function initDownload(btn) {
-    window.location.href = "download.php?file=" + encodeURI(btn.id);
+    window.location.href = "force_download.php?file=" + encodeURI(btn.id);
 }
 
 function loadGrid(btn) {

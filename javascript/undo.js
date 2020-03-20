@@ -218,7 +218,6 @@ function drawGrid(shape, gridArr=null) {
         }
     }
 
-//    document.getElementById("colorPicker").value = color;
     var vals = JSON.parse(sessionStorage.getItem('grid'));
     if (vals !== null) {
         checkForWin();
