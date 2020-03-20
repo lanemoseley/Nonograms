@@ -1,31 +1,45 @@
 <?php
+/**
+ * Author: Lane Moseley
+ * Description: This file contains php code that allows the user to upload files. This file is adapted from sample
+ *              code provided to the class by Dr. Rebenitsch.
+ */
 
-function upload()
-{
-    // TODO: is this actually sanitizing the string?
-// sanitize
-    $fname = $_FILES["fileToUpload"]["name"];
-    $path_parts = pathinfo($fname);
-    $fname = $path_parts['basename'];
-
-
-    //keep uploads separate for security. uploads MUST allow public write, which is VERY unsafe if allowed in general
-    $target_dir = "../uploads/";
-    $message = '';
-
-    $file = $_FILES["fileToUpload"];
-    $target_file = $target_dir . $fname;
-
-    //how to check for file type
-    $imageFileType =
-        strtolower(pathinfo($file["name"],PATHINFO_EXTENSION));
-
-    if($imageFileType != "xml") {
-        echo  "Only xml file types are supported. Please, try a different file.<br>";
+/**
+ * The function used for uploading files to the server.
+ */
+function upload() {
+    // if no file is selected
+    if ($_FILES["fileToUpload"]["name"] === "") {
+        setHeader();
         return;
     }
 
-    // Check if file already exists, and delete it if it does so we can overwrite it
+    // build the file path
+    $target_dir = "../uploads/";
+    $fname = $_FILES["fileToUpload"]["name"];
+    $path_parts = pathinfo($fname);
+    $extension = $path_parts['extension'];
+    $basename = $path_parts['basename'];
+
+    $file = $_FILES["fileToUpload"];
+    $target_file = $target_dir . $basename;
+    $message = '';
+
+    // only allow uploading of XML files
+    if($extension != "xml") {
+        // if the extension is incorrect, display an alert and exit
+        ?>
+        <script type="text/javascript">
+            alert("Only xml file types are supported. Please try a different file.");
+            window.location.href = "index.php";
+        </script>
+        <?php
+
+        return;
+    }
+
+    // overwrite the file if it already exists
     if (file_exists($target_file)) {
         unlink($target_file);
     }
@@ -56,7 +70,7 @@ function upload()
             break;
     }
 
-    //if OK thus far, try to save
+    // if OK thus far, try to save
     if (!$message) {
         if (!is_uploaded_file($file['tmp_name'])) {
             $message = 'Error uploading file - unknown error.';
@@ -69,12 +83,20 @@ function upload()
         }
     }
 
-    //final check, and copy and force download for confirmation
+    // final check, and copy and force download for confirmation
     if ($message != '') {
         echo $message;
     }
+
+    setHeader();
+    return;
 }
 
-?>
-
-
+/**
+ * This function will redirect the user to the file management page.
+ * This prevents form resubmission if they attempt to refresh the page.
+ */
+function setHeader() {
+    header("Location: index.php");
+    return;
+}
