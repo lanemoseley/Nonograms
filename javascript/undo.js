@@ -16,7 +16,7 @@ function History() {
     }
 
 
-    //undo called. Call the undo functin on the current UndoRedo and move back one
+    //undo called. Call the undo function on the current UndoRedo and move back one
     this.undoCmd = function(){
         if(index > 0)
         {
@@ -54,37 +54,23 @@ function History() {
 //concrete UndoRedo class. Since we have undo and redo, we much have
 //a "action" (exec) function and an undo
 //ideally, this should forward these calls onto the class that does the task
-function UndoRedo(letter){
-    this.letter = letter //need to store enough information to undo/redo
+function UndoRedo(btn, attrs){
+    this.old = [btn.innerHTML, btn.style.backgroundColor];
+    this.curr = attrs;
+    this.btn = btn;
 
     //appends the given letter to our result
-    this.exec = function(){
-        var out = document.getElementById("result")
-        out.innerHTML += letter
-
-    }
+    this.exec = function() {
+        this.btn.innerHTML = this.curr[0];
+        this.btn.style.backgroundColor = this.curr[1];
+    };
 
     //removes a letter
-    this.undo = function(){
-        var out = document.getElementById("result")
-        out.innerHTML = out.innerHTML.slice(0,-1)
-    }
-}
-
-
-//map UndoRedos onto buttons
-function letterEvent(event) {
-    if( event.target.id == "buttonA" )
-        hist.executeAction(new UndoRedo("A"))
-    else if( event.target.id == "buttonB" )
-        hist.executeAction(new UndoRedo("B"))
-    else if( event.target.id == "buttonC" )
-        hist.executeAction(new UndoRedo("C"))
-    else if( event.target.id == "buttonD" )
-        hist.executeAction(new UndoRedo("D"))
-
-    updateUI();
-
+    this.undo = function() {
+        this.curr = this.old;
+        this.btn.innerHTML = this.curr[0];
+        this.btn.style.backgroundColor = this.curr[1];
+    };
 }
 
 //toy version of the observer pattern
@@ -148,7 +134,7 @@ function drawGrid(shape) {
             var button = document.createElement('BUTTON');
             button.setAttribute("class", "gridButton");
             button.setAttribute("id", "button" + i*shape[1] + j);
-            button.onclick = setColor;
+            button.onclick = function() { setColor(this) };
 
             var text = document.createTextNode("");
             button.appendChild(text);
@@ -173,18 +159,32 @@ function drawGrid(shape) {
 /**
  * Set the button color to the colorPicker's value
  */
-function setColor() {
+// TODO: this is not a good name
+function setColor(btn) {
     var picker = document.getElementById("colorPicker");
+    var innerhtml, background, attrs;
 
-    if (this.style.backgroundColor != "" && this.innerHTML != "X") {
-        this.style.backgroundColor = "";
-        this.innerHTML = "X";
-    } else if (this.innerHTML == "X") {
-        this.innerHTML = ""
-        this.style.backgroundColor = "";
+    if (btn.style.backgroundColor != "" && btn.innerHTML != "X") {
+        innerhtml = "X";
+        background = "";
+        attrs = [innerhtml, background];
+
+        hist.executeAction(new UndoRedo(btn, attrs));
+    } else if (btn.innerHTML == "X") {
+        innerhtml = "";
+        background = "";
+        attrs = [innerhtml, background];
+
+        hist.executeAction(new UndoRedo(btn, attrs));
     } else {
-        this.style.backgroundColor = picker.value;
+        innerhtml = "";
+        background = picker.value;
+        attrs = [innerhtml, background];
+
+        hist.executeAction(new UndoRedo(btn, attrs));
     }
+
+    updateUI();
 }
 
 function xmlTest() {
