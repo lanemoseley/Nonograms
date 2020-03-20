@@ -1,7 +1,14 @@
+<!--
+Author: Lane Moseley
+Description: This is the landing page for file management.
+             This page allows users to upload, download, and load XML files.
+-->
+
 <?php
 require_once 'upload.php';
+require_once 'file_list.php';
 ?>
-<!--TODO: Fix file paths-->
+
 <html>
 <head lang="en">
     <meta charset="UTF-8">
@@ -11,48 +18,34 @@ require_once 'upload.php';
     <script src="../jquery/jquery.js"></script>
 </head>
 <body>
+<?php include "../includes/header.html" ?>
+<div class="content">
+    <?php
+    // if $_GET['up'] is set, upload the file
+    if (isset($_GET['up'])) {
+        upload();
+    }
+    ?>
 
-<body>
-    <?php include "../includes/header.html" ?>
+    <table>
+        <caption>Select file to upload:</caption>
+        <form action="index.php?up=1" method="post" enctype="multipart/form-data">
+            <tr>
+                <td><input type="file" name="fileToUpload" id="fileToUpload"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Upload" name="submit"></td>
+            </tr>
+        </form>
+    </table>
 
-    <div class="content">
-        <!--basic structure for a file upload-->
+    <table>
+        <caption>Select file to load or download:</caption>
         <?php
-        //determine what to do based on GET variables
-        if (isset($_GET['up'])) {
-            upload();
-        }
+            displayFiles();
         ?>
-        <p id="status"></p>
-        <table>
-            <caption>Select file to upload:</caption>
-            <form action="index.php?up=1" method="post" enctype="multipart/form-data">
-                <tr><td><input type="file" name="fileToUpload" id="fileToUpload"></td></tr>
-                <tr><td><input type="submit" value="Upload" name="submit"></td></tr>
-            </form>
-        </table>
-
-        <table>
-            <caption>Select file to load or download:</caption>
-            <!-- TODO: this should be in a php file -->
-            <?php
-                $path = '../uploads/';
-                $files = scandir($path);
-                $files = array_diff($files, array('.', '..'));
-                foreach($files as $file) {
-                    $fname = str_replace(' ', '%20', $file);
-                    echo "<tr>";
-                    echo "<td>$file</td>";
-                    echo "<td><button id=$fname onClick=\"loadGrid(this)\">Load</button></td><td><button id=$fname onClick=\"initDownload(this)\">Download</button><br></td>";
-                    echo "</tr>";
-                }
-            ?>
-        </table>
-    </div>
-
-    <?php include "../includes/footer.html" ?>
-
-</body>
-
+    </table>
+</div>
+<?php include "../includes/footer.html" ?>
 </body>
 </html>
