@@ -67,9 +67,8 @@ function UndoRedo(btn, attrs){
 
     //removes a letter
     this.undo = function() {
-        this.curr = this.old;
-        this.btn.innerHTML = this.curr[0];
-        this.btn.style.backgroundColor = this.curr[1];
+        this.btn.innerHTML = this.old[0];
+        this.btn.style.backgroundColor = this.old[1];
     };
 }
 
