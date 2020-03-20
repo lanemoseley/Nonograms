@@ -4,7 +4,7 @@
  * Description: This file contains php code that force downloads a given file.
  */
 
-if(isset($_REQUEST["file"])) {
+if (isset($_REQUEST["file"])) {
     // Decode the URL-encoded string
     $file = urldecode($_REQUEST["file"]);
 }

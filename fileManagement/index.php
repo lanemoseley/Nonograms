@@ -42,7 +42,7 @@ require_once 'file_list.php';
     <table>
         <caption>Select file to load or download:</caption>
         <?php
-            displayFiles();
+        displayFiles();
         ?>
     </table>
 </div>

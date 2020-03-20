@@ -8,7 +8,8 @@
 /**
  * The function used for uploading files to the server.
  */
-function upload() {
+function upload()
+{
     // if no file is selected
     if ($_FILES["fileToUpload"]["name"] === "") {
         setHeader();
@@ -27,7 +28,7 @@ function upload() {
     $message = '';
 
     // only allow uploading of XML files
-    if($extension != "xml") {
+    if ($extension != "xml") {
         // if the extension is incorrect, display an alert and exit
         ?>
         <script type="text/javascript">
@@ -96,7 +97,8 @@ function upload() {
  * This function will redirect the user to the file management page.
  * This prevents form resubmission if they attempt to refresh the page.
  */
-function setHeader() {
+function setHeader()
+{
     header("Location: index.php");
     return;
 }
