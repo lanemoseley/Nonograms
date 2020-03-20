@@ -40,9 +40,10 @@ require_once 'upload.php';
                 $files = scandir($path);
                 $files = array_diff($files, array('.', '..'));
                 foreach($files as $file) {
+                    $fname = str_replace(' ', '%20', $file);
                     echo "<tr>";
                     echo "<td>$file</td>";
-                    echo "<td><button id=$file onClick=\"loadGrid(this)\">Load</button></td><td><button id=$file onClick=\"initDownload(this)\">Download</button><br></td>";
+                    echo "<td><button id=$fname onClick=\"loadGrid(this)\">Load</button></td><td><button id=$fname onClick=\"initDownload(this)\">Download</button><br></td>";
                     echo "</tr>";
                 }
             ?>

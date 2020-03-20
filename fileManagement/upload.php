@@ -13,10 +13,6 @@ function upload()
     $target_dir = "../uploads/";
     $message = '';
 
-    //only one file will be permitted to be saved. If you want to permit multiple saves (e.g. one for each user). This:
-    // $target_file = $target_dir . $_FILES["fileToUpload"]["tmp_name"]
-    //would be better as it names it the same as what the user uploaded.
-    //or best yet, use a unique id (uniqid())
     $file = $_FILES["fileToUpload"];
     $target_file = $target_dir . $fname;
 
