@@ -138,7 +138,7 @@ function drawGrid(shape, gridArr=null) {
 
     var picker = sessionStorage.getItem('colorPickerValue');
     if (picker !== null) {
-        document.getElementById("colorPicker").value = picker.value;
+        document.getElementById("colorPicker").value = picker;
     }
 
     var table = document.getElementById( "nonogram" );

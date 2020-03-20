@@ -56,12 +56,13 @@ function importNonogramFromXML(file) {
  */
 function nonogramToXML($grid, $pickerValue) {
     // generate a timestamp for the file
-    var $timeStamp = new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:/g, '-');
+    let $timeStamp = new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:/g, '-');
+    let $filename = "grid_" + $timeStamp;
 
     $.ajax({
         type: 'POST',
         url: 'write.php',
-        data: {timeStamp: $timeStamp, pickerValue: $pickerValue, grid: $grid},
+        data: {filename: $filename, pickerValue: $pickerValue, grid: $grid},
         success: function () {
             document.getElementById("status").innerHTML = "Last Saved: " + $timeStamp;
         },
