@@ -62,6 +62,8 @@ function UndoRedo(id, attrs, oldAttrs, color, oldColor, shape, oldShape){
     this.shape = shape;
     this.oldColor = oldColor;
     this.oldShape = oldShape;
+    this.currGrid = [ ];
+    this.oldGrid;
 
     this.exec = function() {
         if (this.id !== -1) {
@@ -78,7 +80,9 @@ function UndoRedo(id, attrs, oldAttrs, color, oldColor, shape, oldShape){
 
         // update the shape
         if (this.shape !== this.oldShape) {
-            this.drawGrid(this.shape);
+            // save the grid
+            this.currGrid = gridToArray();
+            drawGrid(this.shape);
         }
     };
 
@@ -98,7 +102,7 @@ function UndoRedo(id, attrs, oldAttrs, color, oldColor, shape, oldShape){
 
         // revert the shape
         if (this.shape !== this.oldShape) {
-            this.drawGrid(this.oldShape);
+            drawGrid(this.oldShape, this.currGrid);
         }
     };
 }
@@ -122,8 +126,34 @@ window.onload = function() {
     document.getElementById("colorPicker").value = "#000000";
 
     // set up buttons
-    document.getElementById("resize5x5").onclick = function() { drawGrid([5, 5]) };
-    document.getElementById("resize10x10").onclick = function() { drawGrid([10, 10]) };
+    document.getElementById("resize5x5").onclick = function() {
+        var rows = document.getElementById("nonogram").rows.length;
+        this.oldshape = [rows, rows];
+        this.newshape = [5, 5];
+
+        var id = -1;
+        var attrs = [ ];
+        var color = document.getElementById("colorPicker").value;
+
+        hist.executeAction(new UndoRedo(id, attrs, attrs, color, color, this.newshape, this.oldshape));
+
+        drawGrid(this.newshape);
+    };
+
+    document.getElementById("resize10x10").onclick = function() {
+        var rows = document.getElementById("nonogram").rows.length;
+        this.oldshape = [rows, rows];
+        this.newshape = [10, 10];
+
+        var id = -1;
+        var attrs = [ ];
+        var color = document.getElementById("colorPicker").value;
+
+        hist.executeAction(new UndoRedo(id, attrs, attrs, color, color, this.newshape, this.oldshape));
+
+        drawGrid(this.newshape);
+    };
+
     document.getElementById("undo").onclick = hist.undoCmd;
     document.getElementById("redo").onclick = hist.redoCmd;
     document.getElementById("save").onclick = xmlTest;
@@ -139,13 +169,17 @@ window.onload = function() {
  * @param shape -> the shape of the table
  * @param values -> if given, values to populate grid with
  */
-function drawGrid(shape) {
+function drawGrid(shape, gridArr=null) {
     var oldShape = JSON.parse(sessionStorage.getItem('shape'));
     if (oldShape !== null) {
         shape = oldShape;
     }
 
     var values = JSON.parse(sessionStorage.getItem('grid'));
+
+    if (values === null && gridArr !== null) {
+        values = gridArr.flat();
+    }
 
     var picker = sessionStorage.getItem('colorPicker');
 
@@ -236,10 +270,9 @@ function setColor(btn) {
     updateUI();
 }
 
-function xmlTest() {
+function gridToArray() {
     var grid = document.getElementById("nonogram")
     var values = [ ]
-    var pickerValue = document.getElementById("colorPicker").value;
 
     for (var i = 0; i < grid.rows.length; i++) {
         for (var j = 0; j < grid.rows[i].cells.length; j++) {
@@ -254,6 +287,13 @@ function xmlTest() {
             }
         }
     }
+
+    return values;
+}
+
+function xmlTest() {
+    var values = gridToArray();
+    var pickerValue = document.getElementById("colorPicker").value;
 
     // TODO: these function wrappers can probably be removed
     $(document).ready(function() {
