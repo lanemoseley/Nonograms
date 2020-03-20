@@ -1,367 +1,123 @@
-//helper class to handle the current location in the undo/redo list
+/**
+ * Author: Lane Moseley
+ * Description: This file contains javascript functions used to implement undo and redo. This file contains some code
+ *              that has been adapted from sample code provided to the class by Dr. Rebenitsch.
+ */
+
+/**
+ * helper class to handle the current location in the undo/redo list
+ * @constructor
+ */
 function History() {
-    var UndoRedos =[];
-    var index = 0
+    var UndoRedos = [];
+    var index = 0;
 
-    //new UndoRedo, remove everything after the current UndoRedo index
-    //and append the new function
-    this.executeAction = function(cmd){
-        UndoRedos.length = index; //trims length from 0 to index
+    // new UndoRedo, remove everything after the current UndoRedo index
+    // and append the new function
+    this.executeAction = function (cmd) {
+        UndoRedos.length = index;
         UndoRedos.push(cmd);
-        index = UndoRedos.length
+        index = UndoRedos.length;
 
-        //run the UndoRedo and update
+        // run the UndoRedo and update
         cmd.exec();
         updateUI();
-    }
+    };
 
-
-    //undo called. Call the undo function on the current UndoRedo and move back one
-    this.undoCmd = function(){
-        if(index > 0)
-        {
-            var cmd = UndoRedos[index-1];
+    // call the undo function on the current UndoRedo and move back one
+    this.undoCmd = function () {
+        if (index > 0) {
+            var cmd = UndoRedos[index - 1];
             cmd.undo();
-            index= index - 1;
+            index = index - 1;
             updateUI();
         }
-    }
+    };
 
-    //redo called. Call the execution function on the current UndoRedo and move forward one
-    this.redoCmd = function(){
-        if(index < UndoRedos.length)
-        {
+    // call the execution function on the current UndoRedo and move forward one
+    this.redoCmd = function () {
+        if (index < UndoRedos.length) {
             var cmd = UndoRedos[index];
             cmd.exec();
             index = index + 1;
             updateUI();
         }
-    }
+    };
 
 
-    //is undo available
-    this.canUndo = function(){
-        return index != 0;
-    }
+    // see if undo is available
+    this.canUndo = function () {
+        return index !== 0;
+    };
 
-    //is redo available
-    this.canRedo = function(){
+    // see if redo is available
+    this.canRedo = function () {
         return index < UndoRedos.length;
-    }
+    };
 }
 
-
-//concrete UndoRedo class. Since we have undo and redo, we much have
-//a "action" (exec) function and an undo
-//ideally, this should forward these calls onto the class that does the task
-function UndoRedo(id, attrs, oldAttrs, color, oldColor, shape, oldShape){
+/**
+ * The concrete undo/redo class.
+ * @param attrs -> the map of current attributes
+ * @param oldAttrs -> the map of old attributes
+ * @constructor
+ */
+function UndoRedo(attrs, oldAttrs) {
     this.old = oldAttrs;
     this.curr = attrs;
-    this.id = id;
-    this.color = color;
-    this.shape = shape;
-    this.oldColor = oldColor;
-    this.oldShape = oldShape;
-    this.currGrid = [ ];
-    this.oldGrid;
 
-    this.exec = function() {
-        if (this.id !== -1) {
-            var ele = document.getElementById(this.id);
+    this.exec = function () {
+        // if id is not null update the html element associated with it
+        if (this.curr.get('id') !== null) {
+            var ele = document.getElementById(this.curr.get('id'));
+
             // update the buttons
-            ele.innerHTML = this.curr[0];
-            ele.style.backgroundColor = this.curr[1];
+            ele.innerHTML = this.curr.get('innerHTML');
+            ele.style.backgroundColor = this.curr.get('backgroundColor');
         }
-
-        var picker = document.getElementById("colorPicker");
 
         // update the picker
-        picker.value = this.color;
+        document.getElementById("colorPicker").value = this.curr.get('color');
 
-        // update the shape
-        if (this.shape !== this.oldShape) {
-            // save the grid
-            this.currGrid = gridToArray();
-            drawGrid(this.shape);
+        // if the grid shape has changed, update it
+        if (JSON.stringify(this.curr.get('shape')) !== JSON.stringify(this.old.get('shape'))) {
+            // save the entire grid
+            this.curr.set('grid', nonogramToArray());
+            drawGrid(this.curr.get('shape'));
         }
+
         checkForWin();
     };
 
-    this.undo = function() {
-        if (this.id !== -1) {
-            var ele = document.getElementById(this.id);
+    this.undo = function () {
+        // if id is not null revert the html element associated with it
+        if (this.curr.get('id') !== null) {
+            var ele = document.getElementById(this.curr.get('id'));
 
             // revert the buttons
-            ele.innerHTML = this.old[0];
-            ele.style.backgroundColor = this.old[1];
+            ele.innerHTML = this.old.get('innerHTML');
+            ele.style.backgroundColor = this.old.get('backgroundColor');
         }
-
-        var picker = document.getElementById("colorPicker");
 
         // revert the picker
-        picker.value = this.oldColor;
+        document.getElementById("colorPicker").value = this.old.get('color');
 
-        // revert the shape
-        if (this.shape !== this.oldShape) {
-            drawGrid(this.oldShape, this.currGrid);
+        // if the shape was changed, revert it
+        if (JSON.stringify(this.curr.get('shape')) !== JSON.stringify(this.old.get('shape'))) {
+            drawGrid(this.old.get('shape'), this.curr.get('grid'));
         }
+
         checkForWin();
     };
 }
 
-//toy version of the observer pattern
-function updateUI()
-{
+/**
+ * Update the UI to indicate whether undo/redo is available.
+ */
+function updateUI() {
     document.getElementById("undo").disabled = !hist.canUndo();
     document.getElementById("redo").disabled = !hist.canRedo();
 }
 
-//our undo/redo helper class
+// instantiate the class
 var hist = new History();
-
-
-//attach all functions to html elements
-window.onload = function() {
-    // set up the color picker
-    document.getElementById("colorPicker").onchange = function() { setPickerColor(this) };
-    document.getElementById("colorPicker").onclick= function() {this.oldvalue = this.value; };
-    document.getElementById("colorPicker").value = "#000000";
-
-    // set up buttons
-    document.getElementById("resize5x5").onclick = function() {
-        var rows = document.getElementById("nonogram").rows.length;
-        this.oldshape = [rows, rows];
-        this.newshape = [5, 5];
-
-        var id = -1;
-        var attrs = [ ];
-        var color = document.getElementById("colorPicker").value;
-
-        hist.executeAction(new UndoRedo(id, attrs, attrs, color, color, this.newshape, this.oldshape));
-
-        drawGrid(this.newshape);
-    };
-
-    document.getElementById("resize10x10").onclick = function() {
-        var rows = document.getElementById("nonogram").rows.length;
-        this.oldshape = [rows, rows];
-        this.newshape = [10, 10];
-
-        var id = -1;
-        var attrs = [ ];
-        var color = document.getElementById("colorPicker").value;
-
-        hist.executeAction(new UndoRedo(id, attrs, attrs, color, color, this.newshape, this.oldshape));
-
-        drawGrid(this.newshape);
-    };
-
-    document.getElementById("undo").onclick = hist.undoCmd;
-    document.getElementById("redo").onclick = hist.redoCmd;
-    document.getElementById("save").onclick = xmlTest;
-
-    // draw the grid
-    drawGrid([5, 5]);
-
-    updateUI();
-};
-
-/**
- * Function to draw the nonogram grid
- * @param shape -> the shape of the table
- * @param values -> if given, values to populate grid with
- */
-function drawGrid(shape, gridArr=null) {
-    var oldShape = JSON.parse(sessionStorage.getItem('shape'));
-    if (oldShape !== null) {
-        shape = oldShape;
-    }
-
-    var values = JSON.parse(sessionStorage.getItem('grid'));
-
-    if (values === null && gridArr !== null) {
-        // TODO: should only be using 1 or 2 d arrays not a mix of both!!!!
-        values = gridArr.flat();
-    }
-
-    var picker = sessionStorage.getItem('colorPicker');
-    if (picker !== null) {
-        document.getElementById("colorPicker").value = picker.value;
-    }
-
-    var table = document.getElementById( "nonogram" );
-    table.innerHTML = "";
-
-    for (var i = 0; i < shape[0]; ++i) {
-        newRow = table.insertRow(i);
-
-        for (var j = 0; j < shape[1]; ++j) {
-            newCell = newRow.insertCell(j);
-
-            var button = document.createElement('BUTTON');
-            button.setAttribute("class", "gridButton");
-            button.setAttribute("id", "button" + i*shape[1] + j);
-            button.onclick = function() { setColor(this) };
-
-            var text = document.createTextNode("");
-            button.appendChild(text);
-
-            if(values !== null) {
-                if (values[i*shape[1] + j] === "X") {
-                    button.innerHTML = "X";
-                } else if (values[i*shape[1] + j] !== "none") {
-                    button.style.backgroundColor = values[i*shape[1] + j];
-                }
-            }
-
-            newCell.appendChild(button);
-        }
-    }
-
-    var vals = JSON.parse(sessionStorage.getItem('grid'));
-    if (vals !== null) {
-        checkForWin();
-    }
-
-    sessionStorage.clear();
-}
-
-function setPickerColor(picker) {
-    var id = -1;
-    var attrs = [ ];
-    var oldAttrs = [ ];
-
-    var oldColor = picker.oldvalue;
-    var newColor = picker.value;
-
-    var rows = document.getElementById("nonogram").rows.length;
-    var shape = [rows, rows];
-
-
-    hist.executeAction(new UndoRedo(id, attrs, oldAttrs, newColor, oldColor, shape, shape));
-}
-/**
- * Set the button color to the colorPicker's value
- */
-// TODO: this is not a good name
-function setColor(btn) {
-    var picker = document.getElementById("colorPicker");
-    var innerhtml, background, newAttrs, oldAttrs;
-    oldAttrs = [btn.innerHTML, btn.style.backgroundColor];
-    var rows = document.getElementById("nonogram").rows.length;
-    var shape = [rows, rows];
-    var color = picker.value;
-
-    if (btn.style.backgroundColor != "" && btn.innerHTML != "X") {
-        innerhtml = "X";
-        background = "";
-        newAttrs = [innerhtml, background];
-
-        hist.executeAction(new UndoRedo(btn.id, newAttrs, oldAttrs, color, color, shape, shape));
-    } else if (btn.innerHTML == "X") {
-        innerhtml = "";
-        background = "";
-        newAttrs = [innerhtml, background];
-
-        hist.executeAction(new UndoRedo(btn.id, newAttrs, oldAttrs, color, color, shape, shape));
-    } else {
-        innerhtml = "";
-        background = picker.value;
-        newAttrs = [innerhtml, background];
-
-        hist.executeAction(new UndoRedo(btn.id, newAttrs, oldAttrs, color, color, shape, shape));
-    }
-
-    updateUI();
-    checkForWin();
-}
-
-function checkForWin() {
-    var userArr = gridToArray().flat();
-
-    var rows = document.getElementById("nonogram").rows.length;
-    var path = (rows === 5) ? "res/puzzle1.xml" : "res/puzzle2.xml";
-
-    $.ajax({
-        url: path,
-        success: function(data) {
-            var cells = data.getElementsByTagName("value");
-            var grid = [ ];
-            for (var val in cells) {
-                if (cells[val].hasChildNodes) {
-                    grid.push(cells[val].childNodes[0].nodeValue);
-                }
-            }
-
-            // clean up the user array so we can compare it to the solution
-            var clr = new Option().style;
-            userArr.forEach(function(val, i) {
-                clr.color = val;
-
-                // check if not a valid color
-                if (clr.color !== val) {
-                    userArr[i] = "X";
-                } else {
-                    userArr[i] = "1";
-                }
-            });
-
-            if (JSON.stringify(userArr) == JSON.stringify(grid)) {
-                var final = gridToArray().flat();
-                final.forEach(function(val, i) {
-                    if (val === 'none') { final[i] = "X"; }
-                });
-
-                drawGrid([rows, rows], final);
-
-                alert("Congratulations, you solved this nonogram!")
-            }
-        }
-    });
-}
-
-function gridToArray() {
-    var grid = document.getElementById("nonogram")
-    var values = [ ]
-
-    for (var i = 0; i < grid.rows.length; i++) {
-        for (var j = 0; j < grid.rows[i].cells.length; j++) {
-            if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
-                var cellColor = grid.rows[i].cells.item(j).firstChild.style.backgroundColor;
-                values.push(cellColor);
-            } else if (grid.rows[i].cells.item(j).firstChild.innerText === "X") {
-                values.push("X");
-            } else {
-                values.push("none");
-            }
-        }
-    }
-
-    return values;
-}
-
-function xmlTest() {
-    var values = gridToArray();
-    var pickerValue = document.getElementById("colorPicker").value;
-
-    // TODO: these function wrappers can probably be removed
-    $(document).ready(function() {
-        var $timeStamp = new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:/g, '-');
-        var $grid = values;
-        var $pickerValue = pickerValue;
-
-        $('#save').on('click', function() {
-            $.ajax({
-                type: 'POST',
-                url: 'write.php',
-                data: { timeStamp: $timeStamp, pickerValue: $pickerValue, grid: $grid },
-                success: function() {
-                    document.getElementById("status").innerHTML = "Last Saved: " + $timeStamp;
-                },
-                error: function() {
-                    document.getElementById("status").innerHTML = "Error saving nonogram!";
-                }
-            });
-        });
-    });
-}
