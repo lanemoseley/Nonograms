@@ -22,25 +22,10 @@ function importNonogramFromXML(file) {
     $.ajax({
         url: path,
         success: function (data) {
-            // get the color picker value
-            let pickerValue = data.getElementsByTagName("root")[0].getAttribute("pickerValue");
-
-            // get the nonogram array
-            var cells = data.getElementsByTagName("value");
-            var grid = [];
-
-            for (var val in cells) {
-                if (cells[val].hasChildNodes) {
-                    grid.push(cells[val].childNodes[0].nodeValue);
-                }
-            }
-
-            // get the size of the nonogram grid
-            let width = (grid.length === 25) ? 5 : 10;
-
-            sessionStorage.setItem('colorPickerValue', pickerValue);
-            sessionStorage.setItem('nonogramArray', JSON.stringify(grid));
-            sessionStorage.setItem('nonogramShape', JSON.stringify([width, width]));
+            var result = parseXML(data);
+            sessionStorage.setItem('colorPickerValue', result.get('pickerValue'));
+            sessionStorage.setItem('nonogramArray', JSON.stringify(result.get('grid')));
+            sessionStorage.setItem('nonogramShape', JSON.stringify(result.get('shape')));
             window.location.href = "../index.php";
         },
         error: function () {
@@ -70,4 +55,31 @@ function nonogramToXML($grid, $pickerValue) {
             document.getElementById("status").innerHTML = "Error saving nonogram!";
         }
     });
+}
+
+/**
+ * Parse the nonogram from an XML file.
+ * @param data -> the xml document
+ */
+function parseXML(data) {
+    var result = new Map();
+    result.set('pickerValue', data.getElementsByTagName("root")[0].getAttribute("pickerValue"));
+
+    // get the nonogram array
+    var cells = data.getElementsByTagName("value");
+    var grid = [];
+
+    for (var val in cells) {
+        if (cells[val].hasChildNodes) {
+            grid.push(cells[val].childNodes[0].nodeValue);
+        }
+    }
+
+    result.set('grid', grid);
+
+    // get the size of the nonogram grid
+    let width = (grid.length === 25) ? 5 : 10;
+    result.set('shape', [width, width]);
+
+    return result;
 }
