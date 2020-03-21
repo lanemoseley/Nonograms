@@ -10,7 +10,7 @@ function start() {
     let defaultSize = [5, 5];
 
     // set up the color picker
-    document.getElementById("colorPicker").onchange = function() { setPickerColor(this) };
+    document.getElementById("colorPicker").onchange = function() { onPickerColorChange(this) };
     document.getElementById("colorPicker").onclick= function() { this.oldvalue = this.value; };
     document.getElementById("colorPicker").value = "#000000";
 
