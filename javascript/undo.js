@@ -74,6 +74,8 @@ function UndoRedo(attrs, oldAttrs) {
             // update the buttons
             ele.innerHTML = this.curr.get('innerHTML');
             ele.style.backgroundColor = this.curr.get('backgroundColor');
+
+            checkForWin();
         }
 
         // update the picker
@@ -85,8 +87,6 @@ function UndoRedo(attrs, oldAttrs) {
             this.curr.set('grid', nonogramToArray());
             drawGrid(this.curr.get('shape'));
         }
-
-        checkForWin();
     };
 
     this.undo = function () {
@@ -97,6 +97,8 @@ function UndoRedo(attrs, oldAttrs) {
             // revert the buttons
             ele.innerHTML = this.old.get('innerHTML');
             ele.style.backgroundColor = this.old.get('backgroundColor');
+
+            checkForWin();
         }
 
         // revert the picker
@@ -106,8 +108,6 @@ function UndoRedo(attrs, oldAttrs) {
         if (JSON.stringify(this.curr.get('shape')) !== JSON.stringify(this.old.get('shape'))) {
             drawGrid(this.old.get('shape'), this.curr.get('grid').flat());
         }
-
-        checkForWin();
     };
 }
 
