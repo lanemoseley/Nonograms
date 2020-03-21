@@ -3,29 +3,26 @@
  * Description: This file contains javascript functions used to implement the nonogram.
  */
 
+
 /**
- * Convert the nonogram board to an array
- * @returns {[]} -> the nonogram as an array
+ * Generate an hash map with all necessary attribute values.
+ * @param id -> the element id
+ * @returns {Map<string, object>} -> the map
  */
-function nonogramToArray() {
-    var grid = document.getElementById("nonogram");
-    var values = [];
+function attributeMap(id = null) {
+    var attrMap = new Map();
 
-    for (var i = 0; i < grid.rows.length; i++) {
-        for (var j = 0; j < grid.rows[i].cells.length; j++) {
-            if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
-                var cellColor = grid.rows[i].cells.item(j).firstChild.style.backgroundColor;
-                values.push(cellColor);
-            } else if (grid.rows[i].cells.item(j).firstChild.innerText === "X") {
-                values.push("X");
-            } else {
-                values.push("none");
-            }
-        }
-    }
+    attrMap.set('backgroundColor', '');
+    attrMap.set('id', id);
+    attrMap.set('innerHTML', '');
+    attrMap.set('pickerColor', document.getElementById("colorPicker").value);
 
-    return values;
+    var rows = document.getElementById("nonogram").rows.length;
+    attrMap.set('shape', [rows, rows]);
+
+    return attrMap;
 }
+
 
 /**
  * Check whether the current nonogram board is a winner.
@@ -64,84 +61,6 @@ function checkForWin() {
     });
 }
 
-/**
- * Generate an hash map with all necessary attribute values.
- * @param id -> the element id
- * @returns {Map<string, object>} -> the map
- */
-function attributeMap(id = null) {
-    var attrMap = new Map();
-
-    attrMap.set('backgroundColor', '');
-    attrMap.set('id', id);
-    attrMap.set('innerHTML', '');
-    attrMap.set('pickerColor', document.getElementById("colorPicker").value);
-
-    var rows = document.getElementById("nonogram").rows.length;
-    attrMap.set('shape', [rows, rows]);
-
-    return attrMap;
-}
-
-/**
- * Set the nonogram grid cell value.
- * @param obj -> the grid cell
- */
-function setGridCell(obj) {
-    // get the default attributes
-    var attrMap = attributeMap(obj.id);
-    var oldAttrMap = attributeMap(obj.id);
-
-    oldAttrMap.set('innerHTML', obj.innerHTML);
-    oldAttrMap.set('backgroundColor', obj.style.backgroundColor);
-
-    if (obj.style.backgroundColor !== "" && obj.innerHTML !== "X") {
-        attrMap.set('innerHTML', 'X');
-        attrMap.set('backgroundColor', '');
-    } else if (obj.innerHTML === "X") {
-        attrMap.set('innerHTML', '');
-        attrMap.set('backgroundColor', '');
-    } else {
-        attrMap.set('innerHTML', '');
-        attrMap.set('backgroundColor', document.getElementById("colorPicker").value);
-    }
-
-    hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
-    updateUI();
-    checkForWin();
-}
-
-/**
- * Handle picker color change.
- * @param picker -> the color picker
- */
-function onPickerColorChange(picker) {
-    // get the default attributes
-    var attrMap = attributeMap();
-    var oldAttrMap = attributeMap();
-
-    attrMap.set('pickerColor', picker.value);
-    oldAttrMap.set('pickerColor', picker.oldvalue);
-
-    hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
-}
-
-/**
- * Resize the nonogram grid.
- * @param shape -> the shape to make the grid
- */
-function resizeNonogram(shape) {
-    // get the default attributes
-    var attrMap = attributeMap();
-    var oldAttrMap = attributeMap();
-
-    var rows = document.getElementById("nonogram").rows.length;
-    attrMap.set('shape', shape);
-    oldAttrMap.set('shape', [rows, rows]);
-
-    hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
-    drawGrid(shape);
-}
 
 /**
  * Function to draw the nonogram grid
@@ -192,4 +111,92 @@ function drawGrid(shape, grid = null) {
 
     // if session storage was used, clear it
     sessionStorage.clear();
+}
+
+
+/**
+ * Convert the nonogram board to an array
+ * @returns {[]} -> the nonogram as an array
+ */
+function nonogramToArray() {
+    var grid = document.getElementById("nonogram");
+    var values = [];
+
+    for (var i = 0; i < grid.rows.length; i++) {
+        for (var j = 0; j < grid.rows[i].cells.length; j++) {
+            if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
+                var cellColor = grid.rows[i].cells.item(j).firstChild.style.backgroundColor;
+                values.push(cellColor);
+            } else if (grid.rows[i].cells.item(j).firstChild.innerText === "X") {
+                values.push("X");
+            } else {
+                values.push("none");
+            }
+        }
+    }
+
+    return values;
+}
+
+
+/**
+ * Handle picker color change.
+ * @param picker -> the color picker
+ */
+function onPickerColorChange(picker) {
+    // get the default attributes
+    var attrMap = attributeMap();
+    var oldAttrMap = attributeMap();
+
+    attrMap.set('pickerColor', picker.value);
+    oldAttrMap.set('pickerColor', picker.oldvalue);
+
+    hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
+}
+
+
+/**
+ * Resize the nonogram grid.
+ * @param shape -> the shape to make the grid
+ */
+function resizeNonogram(shape) {
+    // get the default attributes
+    var attrMap = attributeMap();
+    var oldAttrMap = attributeMap();
+
+    var rows = document.getElementById("nonogram").rows.length;
+    attrMap.set('shape', shape);
+    oldAttrMap.set('shape', [rows, rows]);
+
+    hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
+    drawGrid(shape);
+}
+
+
+/**
+ * Set the nonogram grid cell value.
+ * @param obj -> the grid cell
+ */
+function setGridCell(obj) {
+    // get the default attributes
+    var attrMap = attributeMap(obj.id);
+    var oldAttrMap = attributeMap(obj.id);
+
+    oldAttrMap.set('innerHTML', obj.innerHTML);
+    oldAttrMap.set('backgroundColor', obj.style.backgroundColor);
+
+    if (obj.style.backgroundColor !== "" && obj.innerHTML !== "X") {
+        attrMap.set('innerHTML', 'X');
+        attrMap.set('backgroundColor', '');
+    } else if (obj.innerHTML === "X") {
+        attrMap.set('innerHTML', '');
+        attrMap.set('backgroundColor', '');
+    } else {
+        attrMap.set('innerHTML', '');
+        attrMap.set('backgroundColor', document.getElementById("colorPicker").value);
+    }
+
+    hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
+    updateUI();
+    checkForWin();
 }
