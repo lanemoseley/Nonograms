@@ -17,8 +17,7 @@ function attributeMap(id = null) {
     attrMap.set('innerHTML', '');
     attrMap.set('pickerColor', document.getElementById("colorPicker").value);
 
-    var rows = document.getElementById("nonogram").rows.length;
-    attrMap.set('shape', [rows, rows]);
+    attrMap.set('shape', [numRows(), numRows()]);
 
     return attrMap;
 }
@@ -29,10 +28,9 @@ function attributeMap(id = null) {
  */
 function checkForWin() {
     var curr = nonogramToArray().flat();
-    var rows = document.getElementById("nonogram").rows.length;
 
     // get the path to the solution file
-    var path = (rows === 5) ? "res/puzzle1.xml" : "res/puzzle2.xml";
+    var path = (numRows() === 5) ? "res/puzzle1.xml" : "res/puzzle2.xml";
 
     // load the solution file and check the difference
     $.ajax({
@@ -47,14 +45,6 @@ function checkForWin() {
 
             // check if the user's grid matches the solution
             if (JSON.stringify(curr) === JSON.stringify(parseXML(data).get('grid'))) {
-                // if we have a match, fill in the blank cells with X's
-                curr = nonogramToArray().flat();
-                curr.forEach(function (val, i) {
-                    if (val === 'none') {
-                        curr[i] = "X";
-                    }
-                });
-                drawGrid([rows, rows], curr);
                 alert("Congratulations, you solved this nonogram!")
             }
         }
@@ -88,9 +78,16 @@ function drawGrid(shape, grid = null) {
         for (var j = 0; j < shape[1]; ++j) {
             var cell = row.insertCell(j);
 
+            if (i === 0) {
+                var th = document.createElement('th');
+                th.innerHTML = "test1";
+                cell.appendChild(th);
+            }
+
             var button = document.createElement('BUTTON');
             button.setAttribute("class", "gridButton");
-            button.setAttribute("id", "button" + i * shape[1] + j);
+            var id = i * shape[1] + j;
+            button.setAttribute("id", "button" + id);
             button.onclick = function () { setGridCell(this) };
             var text = document.createTextNode("");
             button.appendChild(text);
@@ -102,6 +99,10 @@ function drawGrid(shape, grid = null) {
 
             cell.appendChild(button);
         }
+
+        var th = document.createElement('th');
+        th.innerHTML = "test";
+        row.appendChild(th);
     }
 
     // if a grid was loaded from session storage, check if it is a winner
@@ -115,6 +116,24 @@ function drawGrid(shape, grid = null) {
 
 
 /**
+ * Get the number of cols in the nonogram.
+ * @returns {number} -> number of cols
+ */
+function numCols() {
+    return Math.floor(document.getElementById("nonogram").getElementsByTagName('td').length / numRows() );
+}
+
+
+/**
+ * Get the number of rows in the nonogram.
+ * @returns {number} -> number of rows
+ */
+function numRows() {
+    return document.getElementById("nonogram").getElementsByTagName('tr').length;
+}
+
+
+/**
  * Convert the nonogram board to an array
  * @returns {[]} -> the nonogram as an array
  */
@@ -122,12 +141,15 @@ function nonogramToArray() {
     var grid = document.getElementById("nonogram");
     var values = [];
 
-    for (var i = 0; i < grid.rows.length; i++) {
-        for (var j = 0; j < grid.rows[i].cells.length; j++) {
-            if (grid.rows[i].cells.item(j).firstChild.style.backgroundColor !== "") {
-                var cellColor = grid.rows[i].cells.item(j).firstChild.style.backgroundColor;
-                values.push(cellColor);
-            } else if (grid.rows[i].cells.item(j).firstChild.innerText === "X") {
+    for (var i = 0; i < numRows(); i++) {
+        for (var j = 0; j < numCols(); j++) {
+            var id = i * numCols() + j;
+            id = "button" + id;
+            var cell = document.getElementById(id);
+
+            if (cell.style.backgroundColor !== "") {
+                values.push(cell.style.backgroundColor);
+            } else if (cell.innerText === "X") {
                 values.push("X");
             } else {
                 values.push("none");
@@ -164,9 +186,8 @@ function resizeNonogram(shape) {
     var attrMap = attributeMap();
     var oldAttrMap = attributeMap();
 
-    var rows = document.getElementById("nonogram").rows.length;
     attrMap.set('shape', shape);
-    oldAttrMap.set('shape', [rows, rows]);
+    oldAttrMap.set('shape', [numRows(), numRows()]);
 
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
     drawGrid(shape);
