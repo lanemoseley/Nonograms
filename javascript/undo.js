@@ -82,7 +82,7 @@ function UndoRedo(attrs, oldAttrs) {
         document.getElementById("colorPicker").value = this.curr.get('pickerColor');
 
         // if the grid shape has changed, update it
-        if (JSON.stringify(this.curr.get('shape')) !== JSON.stringify(this.old.get('shape'))) {
+        if (this.curr.get('shape').length !== 0 ) {
             // save the entire grid
             this.curr.set('grid', nonogramToArray());
             drawGrid(this.curr.get('shape'));
@@ -105,7 +105,7 @@ function UndoRedo(attrs, oldAttrs) {
         document.getElementById("colorPicker").value = this.old.get('pickerColor');
 
         // if the shape was changed, revert it
-        if (JSON.stringify(this.curr.get('shape')) !== JSON.stringify(this.old.get('shape'))) {
+        if (this.curr.get('shape').length !== 0) {
             drawGrid(this.old.get('shape'), this.curr.get('grid').flat());
         }
     };
