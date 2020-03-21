@@ -45,7 +45,15 @@ Description: This is the landing page for the nonogram application.
         </tr>
     </table>
 
-    <table id="nonogram"></table>
+    <table>
+        <tr>
+            <td></td><td><table class="top" id="colHints"></table></td>
+        </tr>
+        <tr>
+            <td><table class="left" id="rowHints"></table></td>
+            <td><table class="right" id="nonogram"></table></td>
+        </tr>
+    </table>
 
 </div>
 <?php include "includes/footer.html" ?>
