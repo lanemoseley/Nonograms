@@ -21,7 +21,7 @@ function writeXML() {
 
     // save the cell values
     foreach ($_POST['grid'] as $key => $value) {
-        $child = $xml->addChild("cell");// . $key, $value);
+        $child = $xml->addChild("cell");
         $child->addChild('index', $key);
         $child->addChild('value', $value);
     }
