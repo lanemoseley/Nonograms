@@ -5,7 +5,7 @@
 
 
 /**
- * Generate an hash map with all necessary attribute values.
+ * Generate an hash map with all necessary attributes set to their default value.
  * @param id -> the element id
  * @returns {Map<string, object>} -> the map
  */
@@ -78,12 +78,6 @@ function drawGrid(shape, grid = null) {
         for (var j = 0; j < shape[1]; ++j) {
             var cell = row.insertCell(j);
 
-            if (i === 0) {
-                var th = document.createElement('th');
-                th.innerHTML = "test1";
-                cell.appendChild(th);
-            }
-
             var button = document.createElement('BUTTON');
             button.setAttribute("class", "gridButton");
             var id = i * shape[1] + j;
@@ -99,11 +93,15 @@ function drawGrid(shape, grid = null) {
 
             cell.appendChild(button);
         }
-
-        var th = document.createElement('th');
-        th.innerHTML = "test";
-        row.appendChild(th);
     }
+
+
+    // table.insertRow(0);
+    // var th = document.createElement('th');
+    // th.innerHTML = "test";
+    // row.appe
+    // row.appendChild(th);
+
 
     // if a grid was loaded from session storage, check if it is a winner
     if (sessionStorage.getItem('nonogramArray') !== null) {
@@ -173,6 +171,7 @@ function onPickerColorChange(picker) {
     attrMap.set('pickerColor', picker.value);
     oldAttrMap.set('pickerColor', picker.oldvalue);
 
+    // GRADING: ACTION
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
 }
 
@@ -189,6 +188,7 @@ function resizeNonogram(shape) {
     attrMap.set('shape', shape);
     oldAttrMap.set('shape', [numRows(), numRows()]);
 
+    // GRADING: ACTION
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
     drawGrid(shape);
 }
@@ -217,6 +217,7 @@ function setGridCell(obj) {
         attrMap.set('backgroundColor', document.getElementById("colorPicker").value);
     }
 
+    // GRADING: ACTION
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
     updateUI();
 }
