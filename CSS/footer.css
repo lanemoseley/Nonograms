@@ -1,0 +1,15 @@
+/*
+Author: Lane Moseley
+Description: This is the style sheet for the page footers.
+*/
+
+.footer-center {
+    text-align: center;
+}
+
+.footer {
+    height: 50px;
+    background-color: aqua;
+    border: 1px solid green;
+    padding: 10px 10px;
+}
