@@ -15,7 +15,7 @@ Description: This is the help page for the nonogram application.
 <div class="content">
     <h1>Description</h1>
     <h3>Name: Lane Moseley</h3>
-    <h3>Last Tier Completed: All Four Tiers Complete</h3>
+    <h3>Last Tier Completed: All Four Tiers Complete</h3><br>
     <h3>Graded Extensions (15pts Total):</h3>
     <dl>
         <dt>1B: 5pt Add a colored/image header and/or footer area</dt>
@@ -80,7 +80,7 @@ Description: This is the help page for the nonogram application.
         <dd>- two files containing the solutions to each puzzle are available by default</dd>
         <dd>- files are saved with a default name of <span class="howto">grid_&lt;timestamp&gt;.xml</span></dd>
         <dt>Nonogram Cell Behavior:</dt>
-        <dd>- cells are implemented with buttons which are cycled through three states</dd>
+        <dd>- cells are implemented with buttons which cycle through three states</dd>
         <dd>- on the first click the cell color is changed to match the user-selected color (black is default)</dd>
         <dd>- on the second click a red "X" is displayed to indicated that the cell is unused</dd>
         <dd>- on the third click the cell contents are cleared</dd>

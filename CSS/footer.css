@@ -9,6 +9,7 @@ Description: This is the style sheet for the page footers.
 
 .footer {
     height: 50px;
+    font-size: 18px;
     background-color: #a6a6a6;
     border-top: 2px solid black;
     border-bottom: 2px solid black;
