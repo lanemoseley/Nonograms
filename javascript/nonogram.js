@@ -198,5 +198,4 @@ function setGridCell(obj) {
 
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
     updateUI();
-    checkForWin();
 }
