@@ -17,7 +17,7 @@ function attributeMap(id = null) {
     attrMap.set('innerHTML', '');
     attrMap.set('pickerColor', document.getElementById("colorPicker").value);
 
-    attrMap.set('shape', [numRows(), numRows()]);
+    attrMap.set('shape', [ ]);
 
     return attrMap;
 }
