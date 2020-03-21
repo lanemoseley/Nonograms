@@ -9,7 +9,8 @@ Description: This is the style sheet for the page footers.
 
 .footer {
     height: 50px;
-    background-color: aqua;
-    border: 1px solid green;
+    background-color: #a6a6a6;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
     padding: 10px 10px;
 }

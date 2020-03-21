@@ -8,12 +8,12 @@ Description: This is the style sheet for the page headers.
     float: right;
 }
 
-.header a.active {
-    background-color: dodgerblue;
-    color: white;
+.header a.active:active, .header a.logo:active {
+    background-color: orange;
+    color: black;
 }
 
-.header a.hover {
+.header a:hover {
     background-color: #ddd;
     color: black;
 }
@@ -28,12 +28,14 @@ Description: This is the style sheet for the page headers.
     color: black;
     text-align: center;
     padding: 12px;
-    border-radius: 4px;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 10px;
 }
 
 .header {
     overflow: hidden;
-    background-color: aqua;
-    border: 1px solid green;
+    border-bottom: 2px solid black;
+    background-color: #a6a6a6;
     padding: 20px 10px;
 }
