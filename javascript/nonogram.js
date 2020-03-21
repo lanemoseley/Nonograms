@@ -9,7 +9,7 @@
  */
 function nonogramToArray() {
     var grid = document.getElementById("nonogram");
-    var values = [ ];
+    var values = [];
 
     for (var i = 0; i < grid.rows.length; i++) {
         for (var j = 0; j < grid.rows[i].cells.length; j++) {
@@ -40,10 +40,10 @@ function checkForWin() {
     // load the solution file and check the difference
     $.ajax({
         url: path,
-        success: function(data) {
+        success: function (data) {
             // clean up the user array so we can compare it to the solution
             var s = new Option().style;
-            curr.forEach(function(val, i) {
+            curr.forEach(function (val, i) {
                 s.color = val;
                 curr[i] = (s.color !== val) ? "X" : "1";
             });
@@ -52,7 +52,11 @@ function checkForWin() {
             if (JSON.stringify(curr) === JSON.stringify(parseXML(data).get('grid'))) {
                 // if we have a match, fill in the blank cells with X's
                 curr = nonogramToArray().flat();
-                curr.forEach(function(val, i) { if (val === 'none') { curr[i] = "X"; } });
+                curr.forEach(function (val, i) {
+                    if (val === 'none') {
+                        curr[i] = "X";
+                    }
+                });
                 drawGrid([rows, rows], curr);
                 alert("Congratulations, you solved this nonogram!")
             }
@@ -61,37 +65,45 @@ function checkForWin() {
 }
 
 /**
+ * Generate an hash map with all necessary attribute values.
+ * @param id -> the element id
+ * @returns {Map<string, object>} -> the map
+ */
+function attributeMap(id = null) {
+    var attrMap = new Map();
+
+    attrMap.set('backgroundColor', '');
+    attrMap.set('id', id);
+    attrMap.set('innerHTML', '');
+    attrMap.set('pickerColor', document.getElementById("colorPicker").value);
+
+    var rows = document.getElementById("nonogram").rows.length;
+    attrMap.set('shape', [rows, rows]);
+
+    return attrMap;
+}
+
+/**
  * Set the nonogram grid cell value.
  * @param obj -> the grid cell
  */
 function setGridCell(obj) {
-    var picker = document.getElementById("colorPicker");
-    var attrMap = new Map();
-    var oldAttrMap = new Map();
-
-    attrMap.set('id', obj.id);
-    oldAttrMap.set('id', obj.id);
-
-    var rows = document.getElementById("nonogram").rows.length;
-    attrMap.set('shape', [rows, rows]);
-    oldAttrMap.set('shape', [rows, rows]);
-
-    attrMap.set('color', picker.value);
-    oldAttrMap.set('color', picker.value);
+    // get the default attributes
+    var attrMap = attributeMap(obj.id);
+    var oldAttrMap = attributeMap(obj.id);
 
     oldAttrMap.set('innerHTML', obj.innerHTML);
     oldAttrMap.set('backgroundColor', obj.style.backgroundColor);
 
-
-    if (obj.style.backgroundColor != "" && obj.innerHTML != "X") {
+    if (obj.style.backgroundColor !== "" && obj.innerHTML !== "X") {
         attrMap.set('innerHTML', 'X');
         attrMap.set('backgroundColor', '');
-    } else if (obj.innerHTML == "X") {
+    } else if (obj.innerHTML === "X") {
         attrMap.set('innerHTML', '');
         attrMap.set('backgroundColor', '');
     } else {
         attrMap.set('innerHTML', '');
-        attrMap.set('backgroundColor', picker.value);
+        attrMap.set('backgroundColor', document.getElementById("colorPicker").value);
     }
 
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
@@ -99,23 +111,17 @@ function setGridCell(obj) {
     checkForWin();
 }
 
-function setPickerColor(picker) {
-    var attrMap = new Map();
-    var oldAttrMap = new Map();
+/**
+ * Handle picker color change.
+ * @param picker -> the color picker
+ */
+function onPickerColorChange(picker) {
+    // get the default attributes
+    var attrMap = attributeMap();
+    var oldAttrMap = attributeMap();
 
-    attrMap.set('id', null);
-    oldAttrMap.set('id', null);
-    var rows = document.getElementById("nonogram").rows.length;
-    attrMap.set('backgroundColor', '');
-    attrMap.set('innerHTML', '');
-    oldAttrMap.set('backgroundColor', '');
-    oldAttrMap.set('innerHTML', '');
-
-    attrMap.set('shape', [rows, rows]);
-    oldAttrMap.set('shape', [rows, rows]);
-
-    attrMap.set('color', picker.value);
-    oldAttrMap.set('color', picker.oldvalue);
+    attrMap.set('pickerColor', picker.value);
+    oldAttrMap.set('pickerColor', picker.oldvalue);
 
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
 }
@@ -125,22 +131,13 @@ function setPickerColor(picker) {
  * @param shape -> the shape to make the grid
  */
 function resizeNonogram(shape) {
-    var attrMap = new Map();
-    var oldAttrMap = new Map();
-    var picker = document.getElementById("colorPicker");
-    attrMap.set('id', null);
-    oldAttrMap.set('id', null);
-    var rows = document.getElementById("nonogram").rows.length;
-    attrMap.set('backgroundColor', '');
-    attrMap.set('innerHTML', '');
-    oldAttrMap.set('backgroundColor', '');
-    oldAttrMap.set('innerHTML', '');
+    // get the default attributes
+    var attrMap = attributeMap();
+    var oldAttrMap = attributeMap();
 
+    var rows = document.getElementById("nonogram").rows.length;
     attrMap.set('shape', shape);
     oldAttrMap.set('shape', [rows, rows]);
-
-    attrMap.set('color', picker.value);
-    oldAttrMap.set('color', picker.value);
 
     hist.executeAction(new UndoRedo(attrMap, oldAttrMap));
     drawGrid(shape);
@@ -149,59 +146,50 @@ function resizeNonogram(shape) {
 /**
  * Function to draw the nonogram grid
  * @param shape -> the shape of the table
- * @param values -> if given, values to populate grid with
+ * @param grid -> if given, values to populate grid with
  */
-function drawGrid(shape, gridArr=null) {
-    var oldShape = JSON.parse(sessionStorage.getItem('nonogramShape'));
-    if (oldShape !== null) {
-        shape = oldShape;
-    }
+function drawGrid(shape, grid = null) {
+    // try to get as much info as possible from session storage
+    var storedShape = JSON.parse(sessionStorage.getItem('nonogramShape'));
+    if (storedShape !== null) { shape = storedShape; }
 
-    var values = JSON.parse(sessionStorage.getItem('nonogramArray'));
+    var storedGrid = JSON.parse(sessionStorage.getItem('nonogramArray'));
+    if (storedGrid !== null) { grid = storedGrid; }
 
-    if (values === null && gridArr !== null) {
-        // TODO: should only be using 1 or 2 d arrays not a mix of both!!!!
-        values = gridArr;
-    }
+    var pickerValue = sessionStorage.getItem('colorPickerValue');
+    if (pickerValue !== null) { document.getElementById("colorPicker").value = pickerValue; }
 
-    var picker = sessionStorage.getItem('colorPickerValue');
-    if (picker !== null) {
-        document.getElementById("colorPicker").value = picker;
-    }
-
-    var table = document.getElementById( "nonogram" );
+    // get the table and reset it
+    var table = document.getElementById("nonogram");
     table.innerHTML = "";
 
+    // load the table with values
     for (var i = 0; i < shape[0]; ++i) {
-        newRow = table.insertRow(i);
-
+        var row = table.insertRow(i);
         for (var j = 0; j < shape[1]; ++j) {
-            newCell = newRow.insertCell(j);
+            var cell = row.insertCell(j);
 
             var button = document.createElement('BUTTON');
             button.setAttribute("class", "gridButton");
-            button.setAttribute("id", "button" + i*shape[1] + j);
-            button.onclick = function() { setGridCell(this) };
-
+            button.setAttribute("id", "button" + i * shape[1] + j);
+            button.onclick = function () { setGridCell(this) };
             var text = document.createTextNode("");
             button.appendChild(text);
 
-            if(values !== null) {
-                if (values[i*shape[1] + j] === "X") {
-                    button.innerHTML = "X";
-                } else if (values[i*shape[1] + j] !== "none") {
-                    button.style.backgroundColor = values[i*shape[1] + j];
-                }
+            if (grid !== null) {
+                if (grid[i * shape[1] + j] === "X") { button.innerHTML = "X"; }
+                else if (grid[i * shape[1] + j] !== "none") { button.style.backgroundColor = grid[i * shape[1] + j]; }
             }
 
-            newCell.appendChild(button);
+            cell.appendChild(button);
         }
     }
 
-    var vals = JSON.parse(sessionStorage.getItem('nonogramArray'));
-    if (vals !== null) {
+    // if a grid was loaded from session storage, check if it is a winner
+    if (sessionStorage.getItem('nonogramArray') !== null) {
         checkForWin();
     }
 
+    // if session storage was used, clear it
     sessionStorage.clear();
 }
