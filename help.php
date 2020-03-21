@@ -57,18 +57,32 @@ Description: This is the help page for the nonogram application.
         <dd>- two different nonogram puzzles can be solved (a 5x5 puzzle and a 10x10 puzzle)</dd>
         <dd>- the type of puzzle is determined by which grid size the user selects</dd>
         <dd>- an alert is displayed once a puzzle has been completed</dd>
+        <dd>
+            <br>
+            <table class="images">
+                <tr>
+                    <th>5x5 Puzzle Solution</th>
+                    <th>10x10 Puzzle Solution</th>
+                </tr>
+                <tr>
+                    <td><img src="res/solution5x5.PNG" alt="5x5 Puzzle Solution"/></td>
+                    <td><img src="res/solution10x10.PNG" alt="10x10 Solution"/></td>
+                </tr>
+            </table>
+        </dd>
         <dt>Uploading, Downloading, Saving, and Restoring Nonograms:</dt>
         <dd>- files must be XML format</dd>
         <dd>- each user can upload multiple files</dd>
         <dd>- same-name files are overwritten</dd>
         <dd>- two files containing the solutions to each puzzle are available by default</dd>
-        <dd>- files are saved with a default name of <i>grid_&lt;timestamp&gt;.xml</i></dd>
+        <dd>- files are saved with a default name of <span class="howto">grid_&lt;timestamp&gt;.xml</span></dd>
         <dt>Nonogram Cell Behavior:</dt>
         <dd>- cells are implemented with buttons which are cycled through three states</dd>
         <dd>- on the first click the cell color is changed to match the user-selected color (black is default)</dd>
         <dd>- on the second click a red "X" is displayed to indicated that the cell is unused</dd>
         <dd>- on the third click the cell contents are cleared</dd>
     </dl>
+
 </div>
 <?php include "includes/footer.html" ?>
 </body>

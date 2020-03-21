@@ -10,6 +10,10 @@ Description: This is the main style sheet for the website.
     box-sizing: border-box;
 }
 
+img {
+    padding: 10px;
+}
+
 html, body {
     margin: 0;
 }
@@ -30,6 +34,14 @@ dt {
 
 .howto {
     font-style: italic;
+}
+
+table, td, tr {
+    vertical-align: top;
+}
+
+caption {
+    font-weight: bold;
 }
 
 .gridButton {
