@@ -55,8 +55,9 @@ Description: This is the help page for the nonogram application.
     <dl>
         <dt>Solving the Puzzles:</dt>
         <dd>- two different nonogram puzzles can be solved (a 5x5 puzzle and a 10x10 puzzle)</dd>
-        <dd>- the type of puzzle is determined by which grid size the user selects</dd>
+        <dd>- the solution for the puzzle is determined by the grid size</dd>
         <dd>- an alert is displayed once a puzzle has been completed</dd>
+        <dd>- <span class="howto">although many solutions may exist, this application only checks for the following two possible solutions:</span></dd>
         <dd>
             <br>
             <table class="images">
