@@ -40,6 +40,8 @@ Description: This is the help page for the nonogram application.
               is refreshed</dd>
         <dd><span class="howto">How to test:</span> Redo is greyed out if the user clicks undo and then makes a change</dd>
         <dd><span class="howto">How to test:</span> Undo is greyed out when the oldest change is reached</dd>
+        <dt>4A: 5pt Display the number of consecutive colored cells in each row/column</dt>
+        <dd><span class="howto">How to test:</span> These numbers are displayed above and to the left of the nonogram grid</dd>
     </dl>
     <h1>CSS & Javascript Modifications</h1>
     <dl>
