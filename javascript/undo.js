@@ -8,6 +8,7 @@
  * helper class to handle the current location in the undo/redo list
  * @constructor
  */
+// GRADING: MANAGE
 function History() {
     var UndoRedos = [];
     var index = 0;
@@ -25,6 +26,7 @@ function History() {
     };
 
     // call the undo function on the current UndoRedo and move back one
+    // GRADING: ACTION
     this.undoCmd = function () {
         if (index > 0) {
             var cmd = UndoRedos[index - 1];
@@ -35,6 +37,7 @@ function History() {
     };
 
     // call the execution function on the current UndoRedo and move forward one
+    // GRADING: ACTION
     this.redoCmd = function () {
         if (index < UndoRedos.length) {
             var cmd = UndoRedos[index];
@@ -43,7 +46,6 @@ function History() {
             updateUI();
         }
     };
-
 
     // see if undo is available
     this.canUndo = function () {
@@ -62,6 +64,7 @@ function History() {
  * @param oldAttrs -> the map of old attributes
  * @constructor
  */
+// GRADING: COMMAND
 function UndoRedo(attrs, oldAttrs) {
     this.old = oldAttrs;
     this.curr = attrs;
