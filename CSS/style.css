@@ -37,15 +37,38 @@ dt {
 }
 
 table, td, tr {
-    vertical-align: top;
+    /*border: 1px solid black;*/
+    vertical-align: center;
+}
+
+.top {
+    text-align: center;
+    width: 100%;
+}
+
+.tophint {
+    min-width: 30px;
+}
+
+.lefthint {
+    padding: 7px 0;
+    letter-spacing: 4px;
+    min-height: 30px;
+}
+
+.left {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-align: center;
+    height: 100%;
 }
 
 caption {
     font-weight: bold;
 }
 
+
 .gridButton {
-    color: red;
     font-size: 20px;
     min-width: 30px;
     min-height: 30px;
@@ -56,38 +79,3 @@ caption {
     padding-left: 20px;
     padding-right: 20px;
 }
-
-/*table {*/
-/*    border: 1px solid #ccc;*/
-/*    border-collapse: collapse;*/
-/*    table-layout: fixed;*/
-/*    width: 100%;*/
-/*    margin-bottom: 20px;*/
-/*}*/
-
-/*table tr {*/
-/*    border: 1px solid #ddd;*/
-/*    padding: .35em;*/
-/*}*/
-
-/*table caption {*/
-/*    font-weight: bold;*/
-/*}*/
-
-/*table th,*/
-/*table td {*/
-/*    padding: .625em;*/
-/*    text-align: left;*/
-/*}*/
-/*table th {*/
-/*    background: #999;*/
-/*    color: #fff;*/
-/*    font-size: .85em;*/
-/*    letter-spacing: .1em;*/
-/*    text-transform: uppercase;*/
-/*}*/
-/*table td {*/
-/*    white-space: nowrap;*/
-/*    overflow: hidden;*/
-/*    text-overflow: ellipsis;*/
-/*}*/
