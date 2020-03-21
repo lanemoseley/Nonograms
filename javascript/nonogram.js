@@ -72,9 +72,12 @@ function drawGrid(shape, grid = null) {
     var table = document.getElementById("nonogram");
     table.innerHTML = "";
 
+    drawHints(shape);
+
     // load the table with values
     for (var i = 0; i < shape[0]; ++i) {
         var row = table.insertRow(i);
+
         for (var j = 0; j < shape[1]; ++j) {
             var cell = row.insertCell(j);
 
@@ -95,14 +98,6 @@ function drawGrid(shape, grid = null) {
         }
     }
 
-
-    // table.insertRow(0);
-    // var th = document.createElement('th');
-    // th.innerHTML = "test";
-    // row.appe
-    // row.appendChild(th);
-
-
     // if a grid was loaded from session storage, check if it is a winner
     if (sessionStorage.getItem('nonogramArray') !== null) {
         checkForWin();
@@ -110,6 +105,73 @@ function drawGrid(shape, grid = null) {
 
     // if session storage was used, clear it
     sessionStorage.clear();
+}
+
+
+/**
+ * Display hints above and to the left of the nonogram.
+ * @param shape -> the shape of the nonogram
+ */
+function drawHints(shape) {
+    var smallColHints = [ [1, 1, 1, ' ', ' '],
+                          [3, 2, 3, 5, 3] ];
+
+    var smallRowHints = [ [' ', 5],
+                          [' ', 2],
+                          [1, 3],
+                          [' ', 4],
+                          [' ', 4] ];
+
+    var largeColHints = [ [1, ' ', ' ', ' ', ' ', ' ', ' ', ' ',  ' ', ' '],
+                          [3, 1, 5, 1, 2, ' ', 1, ' ',  ' ', ' '],
+                          [1, 5, 1, 1, 1, 6, 5, ' ',  5, 5],
+                          [1, 2, 2, 2, 2, 1, 1, 10, 1, 3] ];
+
+    var largeRowHints = [ [' ', ' ', 3, 3], [' ', ' ', ' ', 8], [' ', 3, 2, 3], [' ', ' ', 4, 5], [' ', ' ', 3, 5],
+                          [' ', ' ', 1, 4], [' ', 3, 3, 1], [' ', ' ', 2, 4], [' ', 6, 1, 1], [' ', ' ', 2, 2]];
+
+    var len, rowHints, colHints;
+    if (shape[1] === 10) {
+        len = 4;
+        rowHints = largeRowHints;
+        colHints = largeColHints;
+    } else {
+        len = 2;
+        rowHints = smallRowHints;
+        colHints = smallColHints;
+    }
+
+    // display column hints
+    var table = document.getElementById("colHints");
+    table.innerHTML = "";
+    table.setAttribute("width", document.getElementById("nonogram").style.width);
+
+    for (var i = 0; i < len; ++i) {
+        var row = table.insertRow(i);
+
+        for (var j = 0; j < shape[1]; ++j) {
+            var cell = row.insertCell(j);
+            cell.setAttribute("class", "tophint");
+            var text = document.createTextNode(colHints[i][j]);
+            cell.appendChild(text);
+        }
+    }
+
+    // display row hints
+    var table = document.getElementById("rowHints");
+    table.innerHTML = "";
+    table.setAttribute("height", document.getElementById("nonogram").style.height);
+
+    for (var i = 0; i < shape[0]; ++i) {
+        var row = table.insertRow(i);
+
+        for (var j = 0; j < len; ++j) {
+            var cell = row.insertCell(j);
+            cell.setAttribute("class", "lefthint");
+            var text = document.createTextNode(rowHints[i][j]);
+            cell.appendChild(text);
+        }
+    }
 }
 
 
